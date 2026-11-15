@@ -1,0 +1,122 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+import { getTerms } from '../../utils/posts';
+
+const terms = await getTerms();
+const groups = new Map<string, typeof terms>();
+for (const t of terms) {
+	const letter = t.data.term[0].toUpperCase();
+	groups.set(letter, [...(groups.get(letter) ?? []), t]);
+}
+const letters = [...groups.keys()];
+const description =
+	'Plain-English definitions of data warehousing, data management, and AI terms, with examples and practical advice.';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Data and AI Glossary | ${SITE_TITLE}`} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Data and AI glossary</h1>
+			<p class="lede">
+				These are the terms that come up again and again in data warehousing, data management, and AI,
+				explained in plain English. Each one includes an example and what I'd watch out for, based on
+				working with this stuff day to day.
+			</p>
+			<nav class="letters" aria-label="Jump to letter">
+				{letters.map((l) => <a href={`#${l}`}>{l}</a>)}
+			</nav>
+			{
+				letters.map((l) => (
+					<section>
+						<h2 id={l}>{l}</h2>
+						<dl>
+							{groups.get(l)!.map((t) => (
+								<div class="entry">
+									<dt>
+										<a href={`/glossary/${t.id}/`}>{t.data.term}</a>
+										{t.data.draft && <span class="draft-tag">draft</span>}
+									</dt>
+									<dd>
+										{t.data.short} <span class="cat">{t.data.category}</span>
+									</dd>
+								</div>
+							))}
+						</dl>
+					</section>
+				))
+			}
+		</main>
+		<Footer />
+	</body>
+</html>
+<style>
+	.lede {
+		color: var(--muted);
+	}
+	.letters {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4em;
+		margin: 1.5em 0 0.5em;
+	}
+	.letters a {
+		display: inline-block;
+		min-width: 2em;
+		text-align: center;
+		padding: 0.15em 0.3em;
+		border: 1px solid var(--border);
+		border-radius: 4px;
+		text-decoration: none;
+		font-weight: 600;
+	}
+	.letters a:hover {
+		background: var(--surface);
+	}
+	h2 {
+		border-bottom: 1px solid var(--border);
+		padding-bottom: 0.2em;
+		scroll-margin-top: 1em;
+	}
+	dl {
+		margin: 0;
+	}
+	.entry {
+		padding: 0.6em 0;
+	}
+	dt a {
+		font-weight: 600;
+		font-size: 1.05em;
+		text-decoration: none;
+	}
+	dt a:hover {
+		text-decoration: underline;
+	}
+	dd {
+		margin: 0.15em 0 0;
+	}
+	.cat {
+		color: var(--muted);
+		font-size: 0.8em;
+		white-space: nowrap;
+	}
+	.cat::before {
+		content: '· ';
+	}
+	.draft-tag {
+		margin-left: 0.5em;
+		padding: 0.1em 0.5em;
+		border-radius: 4px;
+		background: #fff3cd;
+		color: #664d03;
+		font-size: 0.7em;
+		vertical-align: middle;
+	}
+</style>

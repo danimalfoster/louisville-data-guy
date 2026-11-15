@@ -1,0 +1,120 @@
+---
+import { type CollectionEntry, render } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import PostList from '../../components/PostList.astro';
+import { SITE_TITLE } from '../../consts';
+import { getPosts, getTerms } from '../../utils/posts';
+
+export async function getStaticPaths() {
+	const terms = await getTerms();
+	return terms.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+type Props = { entry: CollectionEntry<'glossary'> };
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+// Related terms that exist (and are visible in this build).
+const allTerms = await getTerms();
+const related = entry.data.related
+	.map((r) => allTerms.find((t) => t.id === r.id))
+	.filter((t): t is CollectionEntry<'glossary'> => Boolean(t));
+
+// Posts that list this term in their `terms` frontmatter.
+const posts = (await getPosts()).filter((p) => p.data.terms.some((t) => t.id === entry.id));
+
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'DefinedTerm',
+	name: entry.data.term,
+	description: entry.data.short,
+	url: new URL(`/glossary/${entry.id}/`, Astro.site).href,
+	inDefinedTermSet: {
+		'@type': 'DefinedTermSet',
+		name: `${SITE_TITLE} Data and AI Glossary`,
+		url: new URL('/glossary/', Astro.site).href,
+	},
+};
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`${entry.data.term}: Definition and Examples | ${SITE_TITLE}`} description={entry.data.short} />
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<article>
+				<p class="crumb"><a href="/glossary/">Glossary</a> / {entry.data.category}</p>
+				<h1>{entry.data.term}</h1>
+				{entry.data.draft && <p class="draft-banner">DRAFT: not visible on the live site</p>}
+				<p class="short">{entry.data.short}</p>
+				<Content />
+			</article>
+			{
+				related.length > 0 && (
+					<section class="related">
+						<h2>Related terms</h2>
+						<ul>
+							{related.map((t) => (
+								<li>
+									<a href={`/glossary/${t.id}/`}>{t.data.term}</a>: {t.data.short}
+								</li>
+							))}
+						</ul>
+					</section>
+				)
+			}
+			{
+				posts.length > 0 && (
+					<section>
+						<h2>Posts about this term</h2>
+						<PostList posts={posts} />
+					</section>
+				)
+			}
+			<p class="back"><a href="/glossary/">← All glossary terms</a></p>
+		</main>
+		<Footer />
+	</body>
+</html>
+<style>
+	.crumb {
+		color: var(--muted);
+		font-size: 0.85em;
+		margin-bottom: 0.5em;
+	}
+	.short {
+		font-size: 1.15em;
+		padding: 0.8em 1em;
+		background: var(--surface);
+		border-left: 4px solid var(--accent);
+		border-radius: 4px;
+		margin: 1em 0 1.5em;
+	}
+	.related {
+		margin-top: 2.5em;
+		padding-top: 0.5em;
+		border-top: 1px solid var(--border);
+	}
+	.related ul {
+		padding-left: 1.2em;
+	}
+	.related li {
+		margin-bottom: 0.5em;
+	}
+	.back {
+		margin-top: 2.5em;
+	}
+	.draft-banner {
+		background: #fff3cd;
+		color: #664d03;
+		padding: 0.5em 1em;
+		border-radius: 4px;
+		font-weight: 700;
+	}
+</style>

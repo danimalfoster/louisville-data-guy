@@ -9,3 +9,8 @@ export async function getPosts() {
 	const posts = await getCollection('blog', ({ data }) => isPreview || !data.draft);
 	return posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 }
+
+export async function getTerms() {
+	const terms = await getCollection('glossary', ({ data }) => isPreview || !data.draft);
+	return terms.sort((a, b) => a.data.term.localeCompare(b.data.term, 'en', { sensitivity: 'base' }));
+}

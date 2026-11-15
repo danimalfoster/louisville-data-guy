@@ -20,3 +20,13 @@ npm run build    # production build into dist/ (drafts hidden)
 
 Posts with `draft: true` never appear on the live site, in the RSS feed, or in the sitemap,
 even if merged by accident.
+
+## Glossary
+
+Terms live in `src/content/glossary/<slug>.md` and publish at `/glossary/<slug>/`, with an A-Z index
+at `/glossary/`. Frontmatter: `term`, `short` (one-sentence definition), `category`
+(`Data warehousing` | `Data management` | `AI`), optional `related` (other slugs) and `draft`.
+
+To connect a blog post to terms, list their slugs in the post's frontmatter, e.g.
+`terms: ['semantic-layer', 'text-to-sql']`. Each term page then lists the post under
+"Posts about this term". In the post body, link the first mention: `[semantic layer](/glossary/semantic-layer/)`.
