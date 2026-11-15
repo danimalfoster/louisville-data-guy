@@ -2,7 +2,6 @@
 title: 'Welcome to Louisville Data Guy'
 description: 'What this blog is about and what to expect from it.'
 pubDate: '2026-11-15'
-draft: true
 ---
 
 Most organizations already have more data than they know what to do with. The hard part is rarely
