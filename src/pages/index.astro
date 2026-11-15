@@ -1,8 +1,8 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import PostList from '../components/PostList.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import { getPosts } from '../utils/posts';
 
@@ -17,45 +17,38 @@ const recent = (await getPosts()).slice(0, 5);
 	<body>
 		<Header />
 		<main>
-			<h1>Louisville Data Guy</h1>
-			<p class="lede">
-				Practical writing on data management and AI: how to organize, govern, and actually use the
-				data you already have, and where AI fits in.
-			</p>
+			<section class="intro">
+				<h1>Hi, I'm <span class="mark">Daniel Foster.</span></h1>
+				<p class="lede">
+					I'm a data and AI leader in Louisville, Kentucky. I write about data management,
+					governance, and putting AI to work on real company data.
+				</p>
+				<p class="intro-links"><a href="/about">More about me</a> · <a href="/rss.xml">Follow via RSS</a></p>
+			</section>
 
-			<h2>Recent posts</h2>
-			{
-				recent.length === 0 ? (
-					<p>The first posts are on their way.</p>
-				) : (
-					<ul class="recent">
-						{recent.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>{post.data.title}</a>
-								{post.data.draft && <strong> (draft)</strong>}
-								<br />
-								<small>
-									<FormattedDate date={post.data.pubDate} />
-								</small>
-							</li>
-						))}
-					</ul>
-				)
-			}
+			<h2 class="section-head">Latest writing</h2>
+			{recent.length === 0 ? <p>The first posts are on their way.</p> : <PostList posts={recent} />}
 			<p><a href="/blog">All posts →</a></p>
 		</main>
 		<Footer />
 	</body>
 </html>
 <style>
+	.intro {
+		margin: 1em 0 3em;
+	}
 	.lede {
-		font-size: 1.25em;
+		font-size: 1.2em;
+		color: var(--text);
 	}
-	.recent {
-		list-style: none;
-		padding: 0;
+	.intro-links {
+		color: var(--muted);
 	}
-	.recent li {
-		margin-bottom: 1em;
+	.section-head {
+		font-size: 1.1em;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: var(--muted);
+		margin-bottom: 0;
 	}
 </style>

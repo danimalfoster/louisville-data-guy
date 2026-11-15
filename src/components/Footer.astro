@@ -1,19 +1,26 @@
 ---
+import { isPreview } from '../utils/posts';
+import ThemeSwitcher from './ThemeSwitcher.astro';
 const today = new Date();
 ---
 
 <footer>
-	&copy; {today.getFullYear()} Louisville Data Guy. All rights reserved.
-	<p><a href="/rss.xml">RSS feed</a></p>
+	<p>
+		&copy; {today.getFullYear()} Daniel Foster ·
+		<a href="https://www.linkedin.com/in/daniel-foster-04536a75">LinkedIn</a> ·
+		<a href="/rss.xml">RSS</a>
+	</p>
 </footer>
+{isPreview && <ThemeSwitcher />}
 <style>
 	footer {
-		padding: 2em 1em 6em 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
-		color: rgb(var(--gray));
+		padding: 2em 1em 7em;
+		border-top: 1px solid var(--border);
+		color: var(--muted);
 		text-align: center;
+		font-size: 0.85em;
 	}
 	footer a {
-		color: rgb(var(--gray));
+		color: var(--muted);
 	}
 </style>
