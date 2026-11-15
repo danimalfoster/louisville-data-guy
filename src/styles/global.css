@@ -1,12 +1,11 @@
 /*
   Base styles adapted from Bear Blog's default CSS (MIT).
   https://github.com/HermanMartinus/bearblog
-  Themes: each [data-theme] block only sets tokens; components read the tokens.
+  Colors and fonts are tokens on :root; components read the tokens.
 */
 
-/* Option B (default): River City blue */
-:root,
-:root[data-theme='b'] {
+/* River City blue */
+:root {
 	--bg: #ffffff;
 	--surface: #f4f7fb;
 	--text: #1b2733;
@@ -19,63 +18,6 @@
 	--mark-text: #1b2733;
 	--font-body: 'Inter', system-ui, sans-serif;
 	--font-head: 'Inter', system-ui, sans-serif;
-	--head-weight: 700;
-	--brand-case: lowercase;
-	--brand-color: var(--accent);
-}
-
-/* Option A: Bourbon and limestone */
-:root[data-theme='a'] {
-	--bg: #faf6ef;
-	--surface: #f2ebdf;
-	--text: #2b2118;
-	--heading: #2b2118;
-	--muted: #6e5d4c;
-	--border: #e4d9c8;
-	--accent: #9a4f12;
-	--accent-hover: #7a3e0e;
-	--mark-bg: transparent;
-	--mark-text: #9a4f12;
-	--font-body: 'Inter', system-ui, sans-serif;
-	--font-head: 'Source Serif 4', Georgia, serif;
-	--head-weight: 600;
-	--brand-case: none;
-	--brand-color: var(--heading);
-}
-
-/* Option C: Bluegrass minimal */
-:root[data-theme='c'] {
-	--bg: #fbfcfa;
-	--surface: #eef3ef;
-	--text: #1f2a24;
-	--heading: #1f2a24;
-	--muted: #5d6b63;
-	--border: #d9e4dc;
-	--accent: #2f6b4f;
-	--accent-hover: #22513b;
-	--mark-bg: transparent;
-	--mark-text: #2f6b4f;
-	--font-body: 'Lora', Georgia, serif;
-	--font-head: 'Lora', Georgia, serif;
-	--head-weight: 600;
-	--brand-case: none;
-	--brand-color: var(--heading);
-}
-
-/* Option D: Data notebook */
-:root[data-theme='d'] {
-	--bg: #0f172a;
-	--surface: #1e293b;
-	--text: #e2e8f0;
-	--heading: #f8fafc;
-	--muted: #94a3b8;
-	--border: #334155;
-	--accent: #38bdf8;
-	--accent-hover: #7dd3fc;
-	--mark-bg: transparent;
-	--mark-text: #a3e635;
-	--font-body: 'Inter', system-ui, sans-serif;
-	--font-head: 'JetBrains Mono', ui-monospace, monospace;
 	--head-weight: 700;
 	--brand-case: lowercase;
 	--brand-color: var(--accent);
