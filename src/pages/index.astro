@@ -1,0 +1,61 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getPosts } from '../utils/posts';
+
+const recent = (await getPosts()).slice(0, 5);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Louisville Data Guy</h1>
+			<p class="lede">
+				Practical writing on data management and AI: how to organize, govern, and actually use the
+				data you already have, and where AI fits in.
+			</p>
+
+			<h2>Recent posts</h2>
+			{
+				recent.length === 0 ? (
+					<p>The first posts are on their way.</p>
+				) : (
+					<ul class="recent">
+						{recent.map((post) => (
+							<li>
+								<a href={`/blog/${post.id}/`}>{post.data.title}</a>
+								{post.data.draft && <strong> (draft)</strong>}
+								<br />
+								<small>
+									<FormattedDate date={post.data.pubDate} />
+								</small>
+							</li>
+						))}
+					</ul>
+				)
+			}
+			<p><a href="/blog">All posts →</a></p>
+		</main>
+		<Footer />
+	</body>
+</html>
+<style>
+	.lede {
+		font-size: 1.25em;
+	}
+	.recent {
+		list-style: none;
+		padding: 0;
+	}
+	.recent li {
+		margin-bottom: 1em;
+	}
+</style>
