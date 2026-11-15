@@ -5,34 +5,29 @@ category: 'AI'
 related: ['embeddings', 'retrieval-augmented-generation', 'data-lakehouse']
 ---
 
-A vector database stores [embeddings](/glossary/embeddings/) (lists of numbers that represent meaning)
-along with the original content and metadata. Its main job is *similarity search*: given a query
-vector, return the stored items whose vectors are closest to it, fast, even among millions or billions
-of items.
+A vector database stores [embeddings](/glossary/embeddings/), along with the original content and some
+details about it, and its main job is finding the items that are most similar to whatever you're
+searching for. It has to do that quickly, even across millions or billions of items.
 
-Ordinary databases are built for exact matches ("customer ID = 4521") and ranges ("orders over $500").
-Vector databases are built for "find me things like this." They use special indexes that find
-approximate nearest neighbors very quickly, trading a tiny amount of accuracy for big speed gains.
+Ordinary databases are built for exact matches, like "customer ID = 4521," and ranges, like "orders over
+$500." Vector databases are built for "find me things like this one." They use special indexes that find
+close matches very fast, giving up a tiny bit of accuracy in exchange for a lot of speed. Some products
+are built just for this, like Pinecone, Weaviate, Qdrant, and Milvus. Many existing databases have added
+vector support too, including PostgreSQL through pgvector, Elasticsearch, MongoDB, Snowflake, Databricks,
+and the major cloud platforms.
 
-Options include purpose-built products like Pinecone, Weaviate, Qdrant, and Milvus, and vector features
-added to existing databases, such as pgvector for PostgreSQL, plus vector search in Elasticsearch,
-MongoDB, Snowflake, Databricks, and the major cloud platforms.
+A legal team is a good example. Say they want to search 200,000 contracts for indemnification clauses
+similar to one they negotiated last year. Each contract gets split into clauses, each clause gets an
+embedding, and those get stored with details like client, contract date, and contract type. A search
+returns the 20 most similar clauses, filtered to the last three years. A keyword search alone would miss
+the clauses that said the same thing in different words.
 
-## An example
+My suggestion for most organizations is to start with the vector features in a database you already run
+before buying a specialized one. A dedicated vector database makes more sense at very large scale or
+when search speed is critical. Starting with what you have means one less system to secure, pay for, and
+maintain.
 
-A legal team wants to search 200,000 contracts for indemnification clauses similar to one they
-negotiated last year. Each contract is split into clauses, each clause is embedded, and the vectors are
-stored with metadata like client, contract date, and contract type. A search returns the 20 most similar
-clauses, filtered to contracts from the last three years. Keyword search alone would miss clauses that
-used different wording.
-
-## Where people get it wrong
-
-**"We need a new specialized database."** For many organizations, the vector features in a database they
-already run are enough. A dedicated vector database makes more sense at very large scale or when search
-speed is critical. Starting with what you have avoids another system to secure and maintain.
-
-**"Similarity search is all you need."** The best results usually combine vector similarity with keyword
-matching and metadata filters, such as date ranges, departments, or the user's access permissions.
-Forgetting permissions is a common and serious mistake: the search must never return documents the
-person isn't allowed to see.
+I'd also caution against relying on similarity alone. The best results usually come from combining
+vector search with keyword matching and filters, like date ranges, departments, or the user's
+permissions. That last one is easy to forget and a big deal when you do. The search should never return a
+document the person isn't allowed to see.

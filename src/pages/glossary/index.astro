@@ -13,7 +13,7 @@ for (const t of terms) {
 }
 const letters = [...groups.keys()];
 const description =
-	'Plain-English definitions of data warehousing, data management, and AI terms, with examples and common misconceptions.';
+	'Plain-English definitions of data warehousing, data management, and AI terms, with examples and practical advice.';
 ---
 
 <!doctype html>
@@ -26,8 +26,9 @@ const description =
 		<main>
 			<h1>Data and AI glossary</h1>
 			<p class="lede">
-				Plain-English definitions of the terms that come up in data warehousing, data management, and
-				AI. Each entry has an example, the mistakes people commonly make, and links to related terms.
+				These are the terms that come up again and again in data warehousing, data management, and AI,
+				explained in plain English. Each one includes an example and what I'd watch out for, based on
+				working with this stuff day to day.
 			</p>
 			<nav class="letters" aria-label="Jump to letter">
 				{letters.map((l) => <a href={`#${l}`}>{l}</a>)}

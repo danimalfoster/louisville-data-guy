@@ -6,39 +6,30 @@ related: ['hallucination', 'retrieval-augmented-generation', 'prompt-engineering
 ---
 
 A large language model is the technology behind tools like ChatGPT, Claude, and Gemini. At its core, an
-LLM does one thing: given some text, it predicts what text should come next. Trained on a vast amount of
-writing, from books to websites to code, and then refined with human feedback, that simple ability turns
-into something that can draft emails, summarize documents, explain concepts, translate, and write SQL.
+LLM does one thing. Given some text, it predicts what text should come next. It learns to do that by
+training on an enormous amount of writing, everything from books to websites to code, and then gets
+refined with human feedback. That one simple ability turns out to be enough to draft emails, summarize
+documents, translate, explain concepts, and write SQL.
 
-A few terms that come up constantly:
+A few terms come up constantly when people talk about LLMs. The prompt is whatever you give the model,
+including your instructions and any context. Tokens are the units the model reads and writes, roughly
+three-quarters of a word each, and pricing and limits are measured in them. The context window is how
+much text the model can take in at once, which ranges from a few pages to several books' worth depending
+on the model. And the training cutoff is the date after which the model has no built-in knowledge.
 
-- **Prompt:** the input you give the model, including instructions and any context.
-- **Token:** the unit models read and write, roughly three-quarters of a word. Pricing and limits are
-  measured in tokens.
-- **Context window:** how much text the model can consider at once, from a few pages to several books'
-  worth, depending on the model.
-- **Training cutoff:** the date after which the model has no built-in knowledge.
+LLMs are very good at language work, like summarizing, rewriting, sorting text into categories, pulling
+structured fields out of messy notes, and writing a first draft of code. They're weaker at exact math, at
+knowing anything specific about your organization, and at knowing when they don't know something. On
+their own, they'll sometimes produce an answer that sounds right and isn't (see
+[hallucination](/glossary/hallucination/)).
 
-## What LLMs are good and bad at
+The biggest misunderstanding I run into is the assumption that the model already knows your data. It
+doesn't. A general-purpose LLM knows nothing about your customers, products, or policies unless you give
+it that information, usually through [retrieval-augmented generation](/glossary/retrieval-augmented-generation/)
+or by connecting it to your systems with something like the
+[Model Context Protocol](/glossary/model-context-protocol/). Most of my work with LLMs is really about
+that connection, getting the right data in front of the model with the right guardrails around it.
 
-LLMs are strong at language tasks: summarizing, rewriting, classifying, extracting structured fields
-from messy text, and generating first drafts of code. They are weaker at exact arithmetic, knowing facts
-about your organization, and knowing when they don't know something. On their own, they can produce
-answers that sound right but aren't (see [hallucination](/glossary/hallucination/)).
-
-## An example
-
-A claims team receives thousands of free-text notes a day. An LLM reads each note and extracts the
-injury type, body part, and whether an attorney is involved into structured fields. Work that took
-analysts hours now takes minutes, with humans reviewing the uncertain cases.
-
-## Where people get it wrong
-
-**"The model knows our data."** A general-purpose LLM knows nothing about your customers, products, or
-policies unless you give it that information in the prompt, usually through
-[retrieval-augmented generation](/glossary/retrieval-augmented-generation/) or tools like the
-[Model Context Protocol](/glossary/model-context-protocol/).
-
-**"Bigger model, better results."** For many business tasks, a smaller, faster, cheaper model with good
-context outperforms a larger model with poor context. The data you give it usually matters more than
-which model you pick.
+People also tend to assume a bigger model gets better results. Sometimes it does, but for a lot of
+business tasks, a smaller, faster, cheaper model with good context will beat a bigger model with poor
+context. In my experience, the data you give the model matters more than which model you pick.

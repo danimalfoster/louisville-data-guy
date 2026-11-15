@@ -5,35 +5,31 @@ category: 'Data management'
 related: ['data-quality', 'master-data-management', 'data-catalog', 'data-lineage']
 ---
 
-Data governance is how an organization decides things about its data, and makes those decisions stick.
-It answers questions like:
+Data governance is how an organization makes decisions about its data and then makes those decisions
+stick. Who's accountable for customer data? What exactly counts as an "active customer"? Who gets to see
+salary data or patient records, and who approves that access? How accurate does the data need to be, and
+who fixes it when it isn't? How long do we have to keep it to stay compliant with rules like HIPAA, GDPR,
+or CCPA? Governance is the set of roles and processes that answers those questions.
 
-- **Ownership:** who is accountable for customer data? For revenue figures?
-- **Definitions:** what exactly counts as an "active customer"?
-- **Access:** who may see salary data or patient records, and who approves that?
-- **Quality:** what level of accuracy is acceptable, and who fixes problems?
-- **Compliance:** how long must we keep data, and how do we meet rules like HIPAA, GDPR, or CCPA?
+The roles usually look something like this. A data owner is a business leader who's accountable for a
+data area, like customer or finance data. Data stewards handle the day-to-day work of maintaining
+definitions and resolving issues. And a governance council, or some group like it, settles disputes when
+departments disagree.
 
-The core roles are usually a **data owner** (a business leader accountable for a data domain), **data
-stewards** (people who maintain definitions and resolve issues day to day), and a **governance council**
-that settles disputes across departments.
+Here's the kind of situation governance is meant for. Sales reports 12,400 customers. Finance reports
+9,800. Both are right, technically. Sales is counting anyone with an open opportunity, and finance is
+counting anyone billed in the last 12 months. Without governance, that argument happens again every
+quarter. With it, someone owns the definition, the business agrees that "active customer" means billed
+in the last 12 months and "prospect" is a separate term, both get documented in the
+[data catalog](/glossary/data-catalog/), and the dashboards get updated to match.
 
-## An example
+The most common mistake I see is treating governance as an IT project. Tools help, but the hard
+decisions, like definitions and ownership, belong to the business. When IT drives governance alone, you
+tend to get policies that nobody follows. I'd also push back on the idea that governance is mostly about
+saying no. Done well, it makes it faster to say yes, because people know what data exists, what it means,
+and whether they're allowed to use it.
 
-Sales reports 12,400 customers. Finance reports 9,800. Both are "right": sales counts anyone with an open
-opportunity, finance counts anyone billed in the last 12 months. A governance process names an owner for
-the customer definition, agrees on "active customer" (billed in the last 12 months) and "prospect" as
-separate terms, documents both in the [data catalog](/glossary/data-catalog/), and updates dashboards to
-match. The argument happens once instead of every quarter.
-
-## Where people get it wrong
-
-**"Governance is an IT project."** Tools help, but the hard decisions, like definitions and ownership,
-are business decisions. Governance led only by IT tends to produce policies nobody follows.
-
-**"Governance means saying no."** Done well, governance makes it faster and safer to say yes, because
-people know what data exists, what it means, and whether they can use it.
-
-**"We'll do governance once AI is in place."** It's the reverse. AI tools that answer questions from
-company data are only as good as the definitions and quality behind them. Governance is what keeps an
-AI assistant from confidently reporting the wrong customer count.
+This is getting more important with AI, not less. I've heard people say they'll get to governance once
+their AI tools are in place, and I think that's backwards. An AI assistant answering questions from your
+data is only as good as the definitions behind it. Governance is what keeps it from confidently giving
+an executive the wrong customer count.

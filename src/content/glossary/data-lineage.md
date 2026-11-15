@@ -5,35 +5,28 @@ category: 'Data management'
 related: ['data-catalog', 'data-quality', 'data-governance', 'etl-vs-elt']
 ---
 
-Data lineage traces a piece of data through its whole life. For any number on a dashboard, lineage
-shows which tables fed it, which transformations changed it, and which source systems it ultimately
-came from. In the other direction, it shows everything downstream that depends on a given table or
-column.
+Data lineage traces data through its whole life. For any number on a dashboard, lineage shows you which
+tables fed it, what transformations changed it along the way, and which source systems it originally
+came from. It works in the other direction too, showing everything downstream that depends on a
+particular table or column. It's usually displayed as a diagram, with boxes for tables, reports, and
+models, and arrows showing how data flows between them.
 
-Lineage is typically shown as a graph: boxes for tables, reports, and models, with arrows showing how
-data flows between them. It can be tracked at the table level (this table feeds that one) or at the
-column level (this revenue column is calculated from these three source columns).
+Where it really earns its keep is when a number looks wrong. If you've ever had a stakeholder email you
+asking why a report doesn't match what they expected, you know the first hour can go to just figuring out
+where the number comes from. I've spent plenty of time tracing a figure back through reports and source
+data to find where a discrepancy started. With good lineage, you start that conversation already knowing
+where to look, which makes a real difference when someone is waiting on an answer.
 
-## Why it matters
+It's just as useful before you change something. Say the finance team plans to rename a column in the
+billing database. Lineage shows that column feeds four warehouse tables, eleven dashboards, and a
+forecasting model. Now the change can be scheduled with the people who own those things, instead of being
+discovered when month-end reports fail. Lineage also comes up more and more in audits and compliance
+reviews, where you may need to show where a reported figure came from or where sensitive data like Social
+Security numbers ends up.
 
-- **Debugging.** When a number looks wrong, lineage tells you where to look instead of guessing.
-- **Impact analysis.** Before changing or retiring a table, you can see every report and model that
-  would break.
-- **Compliance.** Regulators and auditors increasingly ask organizations to show where reported figures
-  come from, and where sensitive data like Social Security numbers flows.
-- **Trust.** Users are more willing to rely on a number when they can see how it was built.
+My main advice is not to rely on documenting lineage by hand. Hand-drawn diagrams are out of date almost
+as soon as they're finished. Lineage is most useful when it's captured automatically from query logs,
+transformation tools like dbt, and your [data catalog](/glossary/data-catalog/).
 
-## An example
-
-The finance team plans to rename a column in the billing database. Lineage shows that column feeds 4
-warehouse tables, 11 dashboards, and a churn prediction model. The change is scheduled with the
-downstream owners instead of being discovered when month-end reports fail.
-
-## Where people get it wrong
-
-**"We'll document lineage by hand."** Hand-drawn lineage diagrams are out of date almost as soon as they
-are finished. Lineage is most useful when it is captured automatically from query logs, transformation
-tools like dbt, and a [data catalog](/glossary/data-catalog/).
-
-**"Lineage is only for engineers."** Business users benefit just as much. Being able to click on a
-dashboard metric and see its source is one of the fastest ways to build trust in data.
+I'd also make it available to business users, not just engineers. Being able to click on a metric in a
+dashboard and see where it came from is one of the quickest ways I know to build trust in the data.

@@ -5,32 +5,28 @@ category: 'Data warehousing'
 related: ['data-warehouse', 'data-lakehouse', 'etl-vs-elt', 'data-catalog']
 ---
 
-A data lake is a place to store data of any kind (database extracts, log files, JSON from APIs, images,
-PDFs) without deciding up front how it will be used. Data usually lands in cloud object storage such as
-Amazon S3, Azure Data Lake Storage, or Google Cloud Storage, in open file formats like Parquet, CSV, or
-JSON.
+A data lake is a place to store large amounts of data in whatever form it shows up in: database
+extracts, log files, JSON from APIs, text files, audio, images. It usually lives in cloud storage like
+Amazon S3, Azure Data Lake Storage, or Google Cloud Storage, often in open file formats like Parquet or
+CSV. The appeal is that you don't have to decide up front exactly how the data will be used. With a
+[data warehouse](/glossary/data-warehouse/), you design the tables first and then load data into them.
+With a lake, you store everything cheaply and add structure when you read it.
 
-The idea is "store now, structure later." A [data warehouse](/glossary/data-warehouse/) requires you to
-design tables before loading data. A lake lets you keep everything cheaply and apply structure only when
-you read it, which is called *schema-on-read*.
+A good example is a project I recently sketched out for turning recorded phone calls into something
+you could analyze. The first step would be transcribing the audio, which leaves you with a pile of text
+files, one per call. Those raw transcripts need somewhere to live before you know exactly what you'll do
+with them, and a lake (or a set of Parquet files) is a natural fit. Once that's in place, you can build
+the more structured layer on top. Think of it as taking the whole conversation and pulling out just the
+questions and answers, along with the details about the call like location, date, and time. That
+structured layer is what people would actually report on. The raw transcripts stay in the lake in case
+you need to go back and extract something different later.
 
-## An example
+The main thing I'd caution against is treating the lake as a dumping ground and assuming people will
+find what they need. Without naming standards, owners, and a [data catalog](/glossary/data-catalog/),
+a lake turns into what people call a data swamp, lots of files nobody can find or trust. I'd also keep
+in mind that lakes often hold the most sensitive data in the company, because nothing has been filtered
+out yet, so access controls matter more here, not less.
 
-A software company streams every click from its app into a data lake, around a billion events a month.
-Nobody reports on raw clicks directly. But when the product team wants to study how a new feature is
-used, data engineers can go back to the full history in the lake and build exactly the tables they need.
-Storing the same volume in a traditional warehouse would have cost far more.
-
-## Where people get it wrong
-
-**"Put everything in the lake and analysts will find it."** Without a
-[data catalog](/glossary/data-catalog/), naming standards, and ownership, a lake turns into a "data
-swamp": lots of files nobody can find, understand, or trust.
-
-**"A lake replaces a warehouse."** Lakes are good at cheap storage and data science work. Business
-reporting still needs cleaned, modeled, documented data. Many organizations now combine the two in a
+Lakes are good at cheap storage and at giving data scientists room to explore. Business reporting still
+needs cleaned, modeled data on top, which is why a lot of organizations now combine the two in a
 [data lakehouse](/glossary/data-lakehouse/).
-
-**"Raw means we don't need governance."** Lakes often hold the most sensitive data in the company,
-because nothing has been filtered out yet. Access controls and
-[data governance](/glossary/data-governance/) matter more here, not less.

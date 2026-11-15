@@ -5,41 +5,33 @@ category: 'AI'
 related: ['large-language-model', 'hallucination', 'retrieval-augmented-generation']
 ---
 
-A [large language model](/glossary/large-language-model/) does what its input suggests, so the quality of
-the input shapes the quality of the output. Prompt engineering is the work of designing that input: the
-instructions, background, examples, and format requirements.
+A [large language model](/glossary/large-language-model/) responds to whatever you give it, so the
+quality of what you put in has a lot to do with the quality of what you get back. Prompt engineering is
+the work of designing that input: the instructions, the background information, examples, and the format
+you want the answer in.
 
-For a one-off question in a chat window, this is mostly common sense. For an AI feature that runs
-thousands of times a day inside a business process, it becomes real engineering, with versioning,
-testing, and measurement.
+For a one-off question in a chat window, most of this is common sense. It gets more serious when the
+prompt is part of a business process that runs thousands of times a day. At that point, you need to
+version your prompts, test them, and measure how they're doing, just like any other part of a system.
 
-## What makes a good prompt
+A good prompt generally covers a few things. It explains the role and the goal, like "You're helping
+claims adjusters summarize case notes for a supervisor." It includes the context the model needs, the
+actual documents, data, or definitions, and in my experience missing context is the number one reason
+for bad answers. It sets clear rules, like "Use only the information provided, and if the answer isn't
+there, say so." It shows two or three examples of good output, which teaches format and tone faster than
+paragraphs of description. And it asks for a specific format, which makes the results consistent and
+easy to check.
 
-- **A clear role and goal.** "You are helping claims adjusters summarize case notes for a supervisor."
-- **The relevant context.** The actual documents, data, or definitions the model needs. Missing context
-  is the most common cause of bad answers.
-- **Explicit rules.** "Use only the information provided. If the answer isn't there, say so."
-- **Examples.** Two or three examples of good output teach format and tone faster than paragraphs of
-  description.
-- **A defined output format.** A specific structure, like JSON fields or a fixed set of headings, makes
-  results consistent and easy to check automatically.
+Say a support team starts with "Summarize this ticket." They get summaries of every length and style. The
+improved version asks for three labeled lines (the customer's issue, what's already been tried, and the
+recommended next step), includes two examples, and says to write "Unknown" when something's missing. Now
+the summaries are consistent enough to feed straight into the team's queue.
 
-## An example
+Prompts also get better when you look at real usage. One project I outlined involved transcribing
+customer calls so we could see what people actually ask for, by time of day, region, and so on, and then
+use that to direct how a voice AI's prompts were written. What customers really say is often different
+from what you'd assume.
 
-A first attempt, "Summarize this support ticket," produces summaries of every length and style. The
-improved prompt asks for three labeled lines (customer issue, steps already taken, recommended next
-action), gives two examples, and says to write "Unknown" when information is missing. Summaries become
-consistent enough to feed straight into the team's queue dashboard.
-
-## Where people get it wrong
-
-**"There's a magic phrase."** Tricks and templates matter much less than they used to. Modern models
-respond best to clear, specific instructions and good context, the same things a capable new employee
-would need.
-
-**"Write it once and ship it."** Prompts should be tested against a set of real examples, with known
-good answers, every time they change. A tweak that fixes one case can quietly break five others.
-
-**"Prompting can fix bad data."** No prompt makes a model correct about data it doesn't have or data
-that is wrong. Context engineering, meaning getting the right, accurate information into the prompt,
-often matters more than wording.
+I'd be skeptical of anyone selling magic phrases. Modern models respond best to clear, specific
+instructions and good context, which is the same thing a capable new employee would need. And no prompt
+will make a model right about data it doesn't have, or data that's wrong.

@@ -5,39 +5,29 @@ category: 'Data warehousing'
 related: ['dimension-table', 'star-schema', 'dimensional-modeling']
 ---
 
-A fact table records things that happened: a sale, a payment, a website visit, a claim. Each row holds
-two kinds of columns:
+A fact table records things that happened, like a sale, a payment, a phone call, or a claim. Each row
+has keys that point to [dimension tables](/glossary/dimension-table/) (which customer, which product,
+which day) and measures, which are the numbers you'll analyze, like quantity, amount, or duration. Fact
+tables are usually the biggest tables in a [data warehouse](/glossary/data-warehouse/), often running
+into the billions of rows, but they tend to be narrow compared to the dimensions around them.
 
-- **Keys** that point to [dimension tables](/glossary/dimension-table/) (which customer, which product,
-  which date).
-- **Measures**, the numbers you analyze: quantity, amount, duration, count.
+The most important decision about a fact table is its grain, meaning exactly what one row represents.
+I've seen a lot of reporting problems trace back to a fact table that mixed grains, for example storing
+the order total on every order line. Somebody sums that column, and the total comes out double or
+triple what it should be. It's an easy mistake to make and a hard one to spot once a report is in
+production, so it's worth being very explicit about the grain up front.
 
-Fact tables are usually the largest tables in a [data warehouse](/glossary/data-warehouse/), often
-billions of rows, and they are narrow compared with dimension tables.
+There are three common types you'll run into. Transaction fact tables have one row per event, like each
+payment, and they're the most common. Periodic snapshots have one row per item per period, like every
+account's balance at the end of each month, which is useful for things you measure rather than count.
+Accumulating snapshots have one row per process that gets updated as it moves through its steps, like a
+loan application with dates for when it was submitted, approved, and funded.
 
-## The grain
+As an example, a hospital might have a patient visit fact table with one row per visit. The keys point
+to patient, provider, department, and date. The measures are length of stay, charges, and a visit count
+that's always 1, which sounds odd but makes "number of visits" a simple sum.
 
-The most important decision about a fact table is its **grain**: what exactly one row represents. "One
-row per order line" and "one row per order" produce very different tables. Mixing grains in one table,
-for example storing order totals on every order line, is the most common cause of numbers that are
-mysteriously double or triple what they should be.
-
-## Three common types
-
-- **Transaction facts:** one row per event, such as each payment. The most common type.
-- **Periodic snapshots:** one row per item per period, such as every account's balance at month end.
-  Useful for things you measure rather than count.
-- **Accumulating snapshots:** one row per process that is updated as it moves through steps, such as a
-  loan application with dates for submitted, approved, and funded.
-
-## An example
-
-A hospital's `fact_patient_visit` table has one row per visit. Keys point to patient, provider,
-department, and date. Measures are length of stay, charges, and a visit count of 1 (which makes "number
-of visits" a simple sum).
-
-## Where people get it wrong
-
-**"All numbers can be added up."** Revenue can be summed across any dimension. Account balances cannot
-be summed across months, and percentages cannot be summed at all. Knowing which measures are additive,
-semi-additive, or non-additive prevents a lot of wrong dashboards.
+One more thing to watch for is that not every number can be added up. Revenue can be summed across
+anything. Account balances can be summed across accounts but not across months, because adding January's
+balance to February's doesn't mean anything. Percentages can't be summed at all. Knowing which of your
+measures fall into which bucket will save you from a lot of wrong dashboards.

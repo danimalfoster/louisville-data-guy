@@ -5,40 +5,29 @@ category: 'AI'
 related: ['vector-database', 'retrieval-augmented-generation', 'large-language-model']
 ---
 
-An embedding turns a piece of content, such as a sentence, a paragraph, a product description, or an
-image, into a long list of numbers called a *vector*. Typical embeddings have hundreds to a few thousand
-numbers. Those numbers aren't meaningful one by one. What matters is that content with similar meaning
-ends up with similar vectors.
+An embedding turns a piece of content, like a sentence, a paragraph, a product description, or an image,
+into a long list of numbers called a vector. Most embeddings have somewhere between a few hundred and a
+few thousand numbers. The individual numbers don't mean anything on their own. What matters is that
+content with similar meaning ends up with similar numbers.
 
-That makes it possible to search by meaning instead of by exact words. "How do I reset my password?" and
-"I'm locked out of my account" share almost no words, but their embeddings are close together, so a
-search for one finds the other.
+That's what lets a computer search by meaning instead of by exact words. "How do I reset my password?"
+and "I'm locked out of my account" have almost no words in common, but their embeddings are close
+together, so a search for one will find the other. Embeddings are created by embedding models, which
+most AI providers offer and which are also available as open source. They're stored and searched in a
+[vector database](/glossary/vector-database/) or in a regular database that supports vectors.
 
-Embeddings are created by specialized embedding models, offered by most AI providers and in open-source
-form. They are stored and searched in a [vector database](/glossary/vector-database/) or a regular
-database with vector support.
+You'll find embeddings behind a lot of things. Semantic search is the obvious one. They're also how
+[retrieval-augmented generation](/glossary/retrieval-augmented-generation/) decides what context to hand
+the model. Recommendation engines use them for "customers who viewed this also viewed." And they're
+useful for grouping things, like sorting thousands of survey comments into themes, or flagging customer
+records that probably refer to the same company.
 
-## Where they are used
+Here's a practical example. A support team creates embeddings for 50,000 past tickets. When a new ticket
+comes in, the system finds the ten most similar past tickets and shows the agent how each one was
+resolved. New agents get up to speed faster because they can see what worked before.
 
-- **Semantic search:** find documents that answer a question, even when the wording differs.
-- **[Retrieval-augmented generation](/glossary/retrieval-augmented-generation/):** pick the right
-  context to give a language model.
-- **Recommendations:** "customers who viewed this also viewed" based on similar items.
-- **Deduplication and matching:** spot near-duplicate support tickets, or likely matching customer
-  records for [master data management](/glossary/master-data-management/).
-- **Classification and clustering:** group thousands of survey comments by theme.
-
-## An example
-
-A support team embeds 50,000 past tickets. When a new ticket arrives, the system finds the ten most
-similar past tickets and shows the agent how each was resolved. New agents solve problems faster
-because they can see what worked before.
-
-## Where people get it wrong
-
-**"Embeddings understand everything."** Embeddings capture general meaning well but can miss exact
-details. Two contracts that differ only in a dollar amount or a date may look nearly identical. That is
-why many systems combine embedding search with keyword search and filters.
-
-**"Embed once and forget it."** If you switch embedding models, all stored vectors must be regenerated,
-because vectors from different models can't be compared.
+There are a couple of limitations to keep in mind. Embeddings capture general meaning well, but they can
+miss exact details. Two contracts that differ only by a dollar amount or a date can look nearly identical,
+which is why a lot of systems combine embedding search with keyword search and filters. And if you ever
+switch embedding models, you'll have to regenerate all your stored vectors, because vectors from
+different models can't be compared to each other.
