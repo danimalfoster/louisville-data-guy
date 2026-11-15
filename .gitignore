@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # local Claude Code tooling
 .claude/
+
+# Netlify CLI local state
+.netlify/
