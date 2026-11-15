@@ -5,11 +5,8 @@ import HeaderLink from './HeaderLink.astro';
 
 <header>
 	<nav>
-		<h2>
-			<a href="/">{SITE_TITLE}</a>
-		</h2>
+		<a href="/" class="brand">{SITE_TITLE}</a>
 		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
 			<HeaderLink href="/blog">Blog</HeaderLink>
 			<HeaderLink href="/about">About</HeaderLink>
 		</div>
@@ -17,34 +14,40 @@ import HeaderLink from './HeaderLink.astro';
 </header>
 <style>
 	header {
-		margin: 0;
-		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
-	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
-
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
+		border-bottom: 1px solid var(--border);
 	}
 	nav {
+		width: 700px;
+		max-width: calc(100% - 2em);
+		margin: auto;
+		padding: 0 1em;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		flex-wrap: wrap;
+		gap: 0.5em;
 	}
-	nav a {
-		padding: 1em 0.5em;
-		color: var(--black);
-		border-bottom: 4px solid transparent;
+	.brand {
+		font-family: var(--font-head);
+		font-weight: var(--head-weight);
+		text-transform: var(--brand-case);
+		color: var(--brand-color);
 		text-decoration: none;
+		padding: 1em 0;
 	}
-	nav a.active {
+	.internal-links {
+		display: flex;
+		gap: 1.25em;
+	}
+	nav :global(.internal-links a) {
+		color: var(--text);
 		text-decoration: none;
+		padding: 1em 0;
+		border-bottom: 3px solid transparent;
+	}
+	nav :global(.internal-links a.active) {
 		border-bottom-color: var(--accent);
+		font-weight: inherit;
+		text-decoration: none;
 	}
 </style>

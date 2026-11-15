@@ -1,0 +1,64 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	posts: CollectionEntry<'blog'>[];
+}
+const { posts } = Astro.props;
+const minutes = (body = '') => Math.max(1, Math.round(body.split(/\s+/).length / 230));
+---
+
+<ul class="post-list">
+	{
+		posts.map((post) => (
+			<li>
+				<a href={`/blog/${post.id}/`} class="post-title">
+					{post.data.title}
+				</a>
+				{post.data.draft && <span class="draft-tag">draft</span>}
+				<p class="post-desc">{post.data.description}</p>
+				<p class="post-meta">
+					<FormattedDate date={post.data.pubDate} /> · {minutes(post.body)} min read
+				</p>
+			</li>
+		))
+	}
+</ul>
+<style>
+	.post-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	.post-list li {
+		padding: 1.1em 0;
+		border-bottom: 1px solid var(--border);
+	}
+	.post-title {
+		font-family: var(--font-head);
+		font-weight: var(--head-weight);
+		font-size: 1.2em;
+		text-decoration: none;
+	}
+	.post-title:hover {
+		text-decoration: underline;
+	}
+	.post-desc {
+		margin: 0.3em 0;
+	}
+	.post-meta {
+		margin: 0;
+		color: var(--muted);
+		font-size: 0.85em;
+	}
+	.draft-tag {
+		margin-left: 0.5em;
+		padding: 0.1em 0.5em;
+		border-radius: 4px;
+		background: #fff3cd;
+		color: #664d03;
+		font-size: 0.7em;
+		vertical-align: middle;
+	}
+</style>
