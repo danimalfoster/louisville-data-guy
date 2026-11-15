@@ -5,38 +5,36 @@ category: 'Data management'
 related: ['data-governance', 'data-lineage', 'master-data-management', 'etl-vs-elt']
 ---
 
-Data quality is not about perfect data. It is about data that is good enough for the decision it
-supports. A marketing email list can tolerate a few bad addresses. A regulatory report or a payroll run
-cannot.
+When someone says a report is wrong, what they usually mean is that the data behind it has a quality
+problem. A value is missing, a record got duplicated, last night's load didn't finish, or two systems
+disagree about the same customer. Data quality is the term for how well your data holds up for what
+you're using it for. That last part matters, because the data doesn't have to be perfect. A marketing
+email list can live with a few bad addresses. Payroll and invoicing can't.
 
-Quality is usually broken into a handful of dimensions:
+The standard way to break it down is into a handful of dimensions: accuracy (does the value match
+reality), completeness (is anything missing), consistency (do the systems agree), timeliness (is it
+current enough), validity (does it follow the rules, like a real state code), and uniqueness (is each
+thing recorded once). You don't need to memorize these. I find them most useful as a checklist when
+I'm trying to figure out what kind of problem I'm looking at.
 
-- **Accuracy:** does the value match reality? (Is this the customer's real address?)
-- **Completeness:** are required values present? (What share of orders has no ship date?)
-- **Consistency:** do systems agree? (Does the order total match the sum of its lines?)
-- **Timeliness:** is the data fresh enough? (Did last night's load finish?)
-- **Validity:** does it follow the rules? (Is every state code a real state?)
-- **Uniqueness:** is each thing recorded once? (Do we have duplicate customers?)
+The part I'd stress is what bad data does to trust. In my experience, the technical fix is usually the
+easy part. The hard part is that once a business team catches a wrong number in a report, they stop
+trusting every number in that report, and often the data team in general. I've spent a good part of my
+career rebuilding that confidence, and it takes a lot longer to earn back than it took to lose. What
+works is communicating often, being upfront when something is wrong, and then delivering what you said
+you would, when you said you would, over and over.
 
-## Testing for quality
+That's why I recommend catching problems before the business does. Most data teams now test their data
+the way software teams test code. Every time data loads, automated checks look for things like row
+counts outside the normal range, empty key columns, duplicate IDs, or totals that don't match the
+source system. Tools like dbt tests, Great Expectations, and Soda make this pretty routine. When a check
+fails, the pipeline stops or someone gets an alert, and you're the one telling stakeholders about a
+delay instead of them telling you the numbers look off.
 
-Modern data teams test data the way software teams test code. Automated checks run every time data
-loads: row counts within expected ranges, no nulls in key columns, no duplicate IDs, totals that match
-the source system. Tools like dbt tests, Great Expectations, Soda, and data observability platforms
-make this routine. When a check fails, the pipeline stops or alerts someone before a bad number reaches
-a dashboard.
-
-## An example
-
-A bank's daily deposit report suddenly shows a 40% drop. A row-count check would have caught it at
-6 a.m.: one branch's file arrived empty because of an upstream outage. Without the check, the executive
-team found it at 9 a.m. in a meeting, and trust in the report took weeks to recover.
-
-## Where people get it wrong
-
-**"Fix it in the warehouse."** Cleaning data downstream treats symptoms. The lasting fix is usually
-upstream: a required field in the entry form, a validation rule in the source system, or a clear owner
-through [data governance](/glossary/data-governance/).
-
-**"Quality is a one-time cleanup project."** Data degrades constantly as people move, systems change,
-and new sources arrive. Quality needs ongoing monitoring, not a single scrub.
+A couple of things I'd caution against. First, it's tempting to clean everything up in the warehouse
+and call it fixed. That treats the symptom. If the bad data starts with a free-text field on an entry
+screen, the lasting fix is upstream, like making the field required or turning it into a dropdown, and
+that takes someone on the business side who owns the data (this is where
+[data governance](/glossary/data-governance/) comes in). Second, data quality isn't a one-time cleanup
+project. People move, systems change, new sources get added, and quality slips unless someone is
+keeping an eye on it.
