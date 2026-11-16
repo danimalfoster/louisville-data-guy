@@ -3,7 +3,6 @@ title: 'Agentic AI for Data Teams: What Counts, What Doesn''t, and the Guardrail
 description: 'What "agentic" actually means, five scenarios from plain automation to full agents, and the guardrails I use when AI touches real data.'
 pubDate: '2026-11-16'
 terms: ['ai-agent', 'model-context-protocol', 'text-to-sql', 'large-language-model', 'hallucination', 'prompt-engineering']
-draft: true
 ---
 
 When I sat down to write this post, I had a working definition of agentic AI in my head. To me, it meant
