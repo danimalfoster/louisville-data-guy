@@ -3,7 +3,6 @@ title: 'MCP Servers for Data Teams: How I Built Ours and Why the Data Dictionary
 description: 'How I use MCP servers to answer the business questions that used to land in my inbox, how they are set up, who uses them, and why a data dictionary is the first thing to build.'
 pubDate: '2026-11-17'
 terms: ['model-context-protocol', 'data-dictionary', 'text-to-sql', 'semantic-layer', 'data-quality', 'large-language-model', 'hallucination']
-draft: true
 ---
 
 If you're on a data team and you're thinking about building an MCP server, my advice is to start with a
