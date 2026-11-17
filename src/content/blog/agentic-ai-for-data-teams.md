@@ -2,7 +2,8 @@
 title: 'Agentic AI for Data Teams: What Counts, What Doesn''t, and the Guardrails That Matter'
 description: 'What "agentic" actually means, five scenarios from plain automation to full agents, and the guardrails I use when AI touches real data.'
 pubDate: '2026-11-16'
-terms: ['ai-agent', 'model-context-protocol', 'text-to-sql', 'large-language-model', 'hallucination', 'prompt-engineering']
+updatedDate: '2026-11-17'
+terms: ['ai-agent', 'model-context-protocol', 'text-to-sql', 'large-language-model', 'hallucination', 'prompt-engineering', 'semantic-layer']
 ---
 
 When I sat down to write this post, I had a working definition of agentic AI in my head. To me, it meant
@@ -40,7 +41,8 @@ of a scanned PDF. The AI is doing real work, but the workflow around it is fixed
 happens next, every time.
 
 I'd call this AI-assisted automation. It's not really agentic, because the AI never decides what to do,
-only how to answer the one question it's given.
+only how to answer the one question it's given. The closest it gets is when the category it picks sends
+the record down one path or another, but even then, every path was written in advance.
 
 ### 3. A chatbot with tools
 
@@ -67,23 +69,38 @@ This is an agent in the full sense. The model is choosing the path, not just the
 Last scenario. The same agent finds the problem and, instead of reporting it, fixes it. It updates the
 records, regenerates the invoices, and emails the customers.
 
-Technically, this is the most "agentic" of the five. It's also the one I would not build, and I'll get
-into why below.
+You might expect this to be the most agentic of the five, but the model isn't deciding anything more
+than it did in scenario 4. It's still choosing the path. What changed is what it's allowed to do with
+what it finds, which went from reading data and reporting back to changing records and contacting
+customers. It's also the one I would not build, and I'll get into why below.
 
 ## So where's the line?
 
 Looking at those five, the thing that separates agentic from not agentic isn't whether there's AI
 involved, and it isn't whether there's a chatbot on the front. It's who decides what happens next. In
-scenarios 1 and 2, the code decides. In 3 through 5, the model decides, with more freedom at each step.
+scenarios 1 and 2, the code decides. In scenario 3, the model decides the next query or two. In 4 and
+5, it decides the whole path.
 
 That lines up with how a lot of people in the field have started describing it, including Anthropic,
-which draws a distinction between workflows, where AI steps follow a predefined path, and agents, where
-the model directs its own process and tool use. It also means agentic isn't a yes or no question. It's a
+whose guide [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents)
+draws a distinction between workflows, where AI steps follow a predefined path, and agents, where the
+model directs its own process and tool use. It also means agentic isn't a yes or no question. It's a
 spectrum, and the real design decision is how far along that spectrum a given process should be.
+
+Scenario 5 points to a second question that tends to get lumped in with the first. How much an agent
+decides on its own is one setting. How much it's allowed to change is a separate one. The invoicing job
+in scenario 1 has no agency at all, but it writes to production every night. The agent in scenario 4
+has a lot of agency, but if its access is read-only, the worst it can do is give you a wrong answer.
+Most of the guardrails below are about keeping that second setting low, even when the first one is high.
 
 So my original definition was partly right. A lot of agentic systems are automated workflows with a chat
 interface. But an automated workflow with AI in it isn't automatically agentic, and most of the
 automation I've built would land in scenarios 1 and 2. I'm fine with that.
+
+It's also worth saying that the agent most data teams will use first probably isn't a chatbot over the
+database. It's an AI coding assistant writing SQL, scripts, and pipelines. That works a lot like
+scenario 4, since the assistant plans its own steps and checks its own results, except what it produces
+is code that a person reviews before it runs. That's how most of the tools I describe below got built.
 
 ## What surprised me
 
@@ -113,7 +130,11 @@ confirmed as their own separate step, not bundled in with other work where they'
 
 There's no room for AI to guess. Fuzzy matching, like "this customer name is close enough to that one,"
 isn't applied unless it has been specifically allowed for that case. If the AI isn't sure, I want it to
-stop and say so, not pick the most likely answer.
+stop and say so, not pick the most likely answer. That said, you can't count on the model to know when
+it isn't sure. These models can be confidently wrong, so a rule like this has to be enforced by the
+tools, not just the instructions. If fuzzy matching isn't allowed for a task, the AI shouldn't have a
+tool that does it, and results should be checked against things like row counts and control totals
+before anyone trusts them.
 
 AI finds problems. People decide how to fix them. This is probably the most important rule I have. I use
 AI to detect issues in the data and the database, and it's very good at that. But I don't want it using
@@ -134,22 +155,60 @@ neither needs everything.
 Every query gets checked before it runs. Any SQL the AI writes through our MCP tools is checked by
 sqlglot, an open-source SQL parser, before it's executed. If the check fails, the query is blocked. That
 catches things like write statements sneaking into a read-only tool, and queries against tables that
-aren't on the approved list.
+aren't on the approved list. The parser is a second layer, though, not the first. The first is the
+database login the tool connects with, and every read-only tool I build connects with a login that can
+only read. A parser can miss things, like a function that changes data being called from inside a
+SELECT, but a read-only login can't write no matter what query gets through.
 
 Log everything. Every tool you build should log what the AI did, what it asked for, and what came back.
 Those logs are how you find weaknesses you didn't anticipate, and they're what you'll want when someone
 asks why a number came out the way it did.
 
-Write tool notices so they don't sound like instructions. This one is subtle. When a tool returns a
-message to the model, like a warning that results were truncated, the model reads that text as part of
-its context. If it's written as a command, the model may treat it as one. So I write those notices in
-passive voice ("Results were limited to 500 rows") rather than as directions ("Tell the user to narrow
-their query"). It's a small thing that makes the model's behavior more predictable.
+Write tool notices so they don't sound like instructions to pass along. This one is subtle. When a tool
+returns a message to the model, like a warning that results were truncated, the model reads that text as
+part of its context. If it's written as a command aimed at someone else ("Tell the user to narrow their
+query"), the model may repeat it word for word or act on it in ways you didn't expect. So I write those
+notices as plain statements ("Results were limited to 500 rows"). Hints meant for the model itself are a
+different case. An error like "No rows matched, check the date range" is useful, because it helps the
+model fix its own next query.
+
+Treat the data itself as untrusted. The same problem applies to everything a tool returns, not just your
+own notices. Free-text fields like account notes, support tickets, and customer emails end up in the
+model's context when it queries them, and if someone wrote instructions into one of those fields, the
+model may follow them. This is called prompt injection. The risk is highest when one agent can read
+private data, read text that came from outside the company, and send things out, like drafting emails.
+Scenario 5 has all three. Keeping writes behind human review covers a lot of this, but it's worth knowing
+which fields could contain outside text and being careful about which tools can see them.
 
 Give the AI standing instructions and context. Most AI tools now support some form of memory or project
 notes, files the AI reads every time it starts work. That's where I keep the context that doesn't change
 much, like business rules, naming conventions, which tables are the trusted ones, and the guardrails
 themselves. It means I'm not relying on remembering to type all of that into every prompt.
+
+## Testing it
+
+I'll mention below that a real agent needs more testing than a fixed workflow, and it's worth saying what
+that looks like, because it's different from testing normal code. The same question can produce
+different SQL on different days, and both versions might run without errors. So a test that only checks
+whether the query ran tells you almost nothing.
+
+My recommendation is to build a set of questions you already know the answers to, ideally ones your
+existing reports can confirm. What was total revenue last quarter? How many active customers did each
+region have at the end of September? Run the agent against that set whenever you change a prompt, a
+tool, or the model, and compare its answers to the known ones. When it gets one wrong, the logs will
+show you where it went off track, and it's usually a missing business rule or a table that looks right
+but isn't.
+
+That gets at a problem that has nothing to do with AI. If two analysts would calculate revenue two
+different ways, the agent will too. Agents do much better against a small set of curated views or a
+[semantic layer](/glossary/semantic-layer/), where metrics like revenue and active customers are defined
+once, than against raw tables where they have to work out the definitions themselves.
+
+Longer agents like the one in scenario 4 have a few more ways to fail. A small mistake early in the chain
+carries into everything after it. Agents sometimes stop before they've really finished, or report success
+on work that's only partly done. And a query that returns a lot of rows can crowd earlier context out of
+what the model can hold at once. None of these tend to show up in a demo, which is why the test set
+matters.
 
 ## What the hype gets wrong
 
@@ -186,7 +245,9 @@ That brings me to the point I most want to make. Agentic AI is great when it has
 around it, but not everything needs to be agentic. There are a lot of cases where just automating a
 process, without any AI at all, is enough. Before reaching for an agent, it's worth asking whether the
 steps are already known. If they are, write the workflow. Save the agents for the work where the path
-really does depend on what you find along the way.
+really does depend on what you find along the way. That's also the advice in the Anthropic guide I
+mentioned earlier, which recommends starting with the simplest option and only adding complexity when
+it's needed.
 
 Next up, I'll go deeper on MCP servers, including how I set them up and how the guardrails above work in
 practice. If you have questions about any of this, or you're working through the same decisions at your
