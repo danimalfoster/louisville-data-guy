@@ -2,7 +2,7 @@
 term: 'Data catalog'
 short: 'A searchable inventory of an organization''s data assets, with descriptions, owners, definitions, and usage, so people can find and understand data.'
 category: 'Data management'
-related: ['data-governance', 'data-lineage', 'semantic-layer', 'data-lake']
+related: ['data-governance', 'data-lineage', 'semantic-layer', 'data-dictionary']
 ---
 
 A data catalog works a lot like a library catalog, but for data. Instead of asking around to find out
