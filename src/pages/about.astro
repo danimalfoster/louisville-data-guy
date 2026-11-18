@@ -1,11 +1,21 @@
 ---
+import { Image } from 'astro:assets';
 import Layout from '../layouts/BlogPost.astro';
+import headshot from '../assets/daniel-foster.jpg';
 ---
 
 <Layout
 	title="About me"
 	description="Daniel Foster is a data and AI leader in Louisville, Kentucky, writing about data management and putting AI to work on real company data."
 >
+	<Image
+		src={headshot}
+		alt="Daniel Foster"
+		width={440}
+		height={440}
+		class="headshot"
+		loading="eager"
+	/>
 	<p>
 		I'm Daniel Foster, a data and AI leader based in Louisville, Kentucky. For more than a decade
 		I've worked on the same problem from different angles: getting the right data to the people who
@@ -54,6 +64,12 @@ import Layout from '../layouts/BlogPost.astro';
 		</li>
 	</ul>
 
+	<h2>Outside of work</h2>
+	<p>
+		When I'm not working on data projects, my interests include cooking and baking, running,
+		coaching my kids' sports teams, and golfing (poorly).
+	</p>
+
 	<h2>Get in touch</h2>
 	<p>
 		Connect with me on <a href="https://www.linkedin.com/in/daniel-foster-04536a75">LinkedIn</a>, or
@@ -62,3 +78,24 @@ import Layout from '../layouts/BlogPost.astro';
 
 	<p><em>The views on this site are my own and don't represent my employer.</em></p>
 </Layout>
+<style>
+	.headshot {
+		float: right;
+		width: 220px;
+		height: 220px;
+		border-radius: 50%;
+		object-fit: cover;
+		margin: 0.3em 0 1em 1.5em;
+		border: 4px solid var(--surface);
+		box-shadow: 0 0 0 1px var(--border);
+	}
+	@media (max-width: 600px) {
+		.headshot {
+			float: none;
+			display: block;
+			width: 180px;
+			height: 180px;
+			margin: 0 auto 1.5em;
+		}
+	}
+</style>

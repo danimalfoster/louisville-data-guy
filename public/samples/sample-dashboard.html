@@ -71,8 +71,22 @@
 		cursor: pointer;
 	}
 	.seg button + button { border-left: 1px solid var(--border); }
-	.seg button[aria-pressed='true'] { background: var(--accent); color: #fff; font-weight: 600; }
-	@media (prefers-color-scheme: dark) { .seg button[aria-pressed='true'] { color: #0f1720; } }
+	.seg button[aria-pressed='true'] { background: var(--accent); color: var(--bg); font-weight: 600; }
+	:root[data-theme='dark'] {
+		--bg: #0f1720;
+		--surface: #16212d;
+		--card: #1b2836;
+		--text: #e6edf4;
+		--muted: #9fb0c2;
+		--border: #2c3c4e;
+		--grid: #243344;
+		--accent: #6fa3e0;
+		--accent-soft: #24405f;
+		--good: #5cc58f;
+		--bad: #f08a80;
+		--note-bg: #3a3118;
+		--note-text: #f3dc9a;
+	}
 	.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 	.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
 	.kpi .label { font-size: 0.8rem; color: var(--muted); }
@@ -385,6 +399,19 @@
 	// Tell an embedding page how tall the dashboard is, so it can size its iframe.
 	const postHeight = () => { if (window.parent !== window) window.parent.postMessage({ sampleDashboardHeight: document.body.offsetHeight }, location.origin); };
 	new ResizeObserver(postHeight).observe(document.body);
+	// When embedded on the blog, follow the blog's light/dark toggle.
+	try {
+		const parentRoot = window.parent !== window && window.parent.document.documentElement;
+		if (parentRoot) {
+			const sync = () => {
+				const t = parentRoot.dataset.theme;
+				if (t) document.documentElement.dataset.theme = t;
+				else delete document.documentElement.dataset.theme;
+			};
+			sync();
+			new MutationObserver(sync).observe(parentRoot, { attributes: true, attributeFilter: ['data-theme'] });
+		}
+	} catch (e) {}
 })();
 </script>
 </body>

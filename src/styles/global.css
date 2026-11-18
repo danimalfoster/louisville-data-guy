@@ -4,23 +4,71 @@
   Colors and fonts are tokens on :root; components read the tokens.
 */
 
-/* River City blue */
+/* River City blue on warm paper, with a serif for headings */
 :root {
-	--bg: #ffffff;
-	--surface: #f4f7fb;
+	color-scheme: light;
+	--bg: #fbfaf7;
+	--surface: #f1eee7;
+	--card: #ffffff;
 	--text: #1b2733;
-	--heading: #1b2733;
-	--muted: #5a6b7d;
-	--border: #dde5ee;
+	--heading: #14202c;
+	--muted: #5d6b78;
+	--border: #e3ded3;
 	--accent: #1d4e89;
 	--accent-hover: #143a68;
+	--chip-bg: #e7eef7;
+	--chip-text: #1d4e89;
 	--mark-bg: #f7d774;
 	--mark-text: #1b2733;
+	--draft-bg: #fff3cd;
+	--draft-text: #664d03;
+	--shadow: 0 1px 2px rgba(20, 32, 44, 0.05), 0 4px 14px rgba(20, 32, 44, 0.06);
 	--font-body: 'Inter', system-ui, sans-serif;
-	--font-head: 'Inter', system-ui, sans-serif;
-	--head-weight: 700;
+	--font-head: 'Newsreader', Georgia, 'Times New Roman', serif;
+	--head-weight: 600;
 	--brand-case: lowercase;
 	--brand-color: var(--accent);
+}
+/* Dark mode: follows the system unless the reader picks light or dark with the toggle. */
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) {
+		color-scheme: dark;
+		--bg: #10161d;
+		--surface: #18212b;
+		--card: #1a242f;
+		--text: #dde5ee;
+		--heading: #f2f5f8;
+		--muted: #9aa9b8;
+		--border: #2a3644;
+		--accent: #7fb0ec;
+		--accent-hover: #a6c8f2;
+		--chip-bg: #1f3349;
+		--chip-text: #a6c8f2;
+		--mark-bg: #7a6420;
+		--mark-text: #fff6d6;
+		--draft-bg: #3a3118;
+		--draft-text: #f3dc9a;
+		--shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 14px rgba(0, 0, 0, 0.25);
+	}
+}
+:root[data-theme='dark'] {
+	color-scheme: dark;
+	--bg: #10161d;
+	--surface: #18212b;
+	--card: #1a242f;
+	--text: #dde5ee;
+	--heading: #f2f5f8;
+	--muted: #9aa9b8;
+	--border: #2a3644;
+	--accent: #7fb0ec;
+	--accent-hover: #a6c8f2;
+	--chip-bg: #1f3349;
+	--chip-text: #a6c8f2;
+	--mark-bg: #7a6420;
+	--mark-text: #fff6d6;
+	--draft-bg: #3a3118;
+	--draft-text: #f3dc9a;
+	--shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
 body {
@@ -124,6 +172,37 @@ hr {
 	h1 {
 		font-size: 2em;
 	}
+}
+
+/* Topic chips (glossary terms tagged on posts) */
+.chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35em;
+	padding: 0.15em 0.65em;
+	border-radius: 999px;
+	background: var(--chip-bg);
+	color: var(--chip-text);
+	font-size: 0.78rem;
+	line-height: 1.6;
+	text-decoration: none;
+	white-space: nowrap;
+}
+a.chip:hover {
+	background: var(--accent);
+	color: var(--bg);
+}
+.chip .count {
+	opacity: 0.7;
+	font-variant-numeric: tabular-nums;
 }
 
 .sr-only {

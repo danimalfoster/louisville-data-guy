@@ -1,12 +1,15 @@
 ---
+import { Image } from 'astro:assets';
+import headshot from '../assets/daniel-foster.jpg';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import PostList from '../components/PostList.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import { getPosts } from '../utils/posts';
+import { chipName, getPosts, getTopics } from '../utils/posts';
 
 const recent = (await getPosts()).slice(0, 5);
+const topics = (await getTopics()).slice(0, 12);
 ---
 
 <!doctype html>
@@ -17,38 +20,116 @@ const recent = (await getPosts()).slice(0, 5);
 	<body>
 		<Header />
 		<main>
-			<section class="intro">
-				<h1>Hi, I'm <span class="mark">Daniel Foster.</span></h1>
-				<p class="lede">
-					I'm a data and AI leader in Louisville, Kentucky. I write about data management,
-					governance, and putting AI to work on real company data.
-				</p>
-				<p class="intro-links"><a href="/about">More about me</a> · <a href="/rss.xml">Follow via RSS</a></p>
+			<section class="hero">
+				<h1>
+					<a href="/about" class="hero-name">Daniel</a> writes about <em>data management</em> and
+					putting <em>AI</em> to work on real company data.
+				</h1>
+				<div class="hero-sub">
+					<Image src={headshot} alt="" width={112} height={112} class="avatar" loading="eager" />
+					<p>
+						Data and AI leader in Louisville, Kentucky. Lately I'm connecting business teams to
+						their data through AI and MCP servers, with guardrails.
+						<span class="hero-links"><a href="/about">More about me</a> · <a href="/rss.xml">RSS</a></span>
+					</p>
+				</div>
 			</section>
+
+			{
+				topics.length > 0 && (
+					<section class="topics" aria-labelledby="topics-head">
+						<h2 id="topics-head" class="section-head">Topics</h2>
+						<ul class="chips">
+							{topics.map((t) => (
+								<li>
+									<a class="chip" href={`/glossary/${t.id}/`}>
+										{chipName(t.term)} <span class="count">{t.count}</span>
+									</a>
+								</li>
+							))}
+							<li>
+								<a class="chip all" href="/glossary/">
+									All glossary terms →
+								</a>
+							</li>
+						</ul>
+					</section>
+				)
+			}
 
 			<h2 class="section-head">Latest writing</h2>
 			{recent.length === 0 ? <p>The first posts are on their way.</p> : <PostList posts={recent} />}
-			<p><a href="/blog">All posts →</a></p>
+			<p class="all-posts"><a href="/blog">All posts →</a></p>
 		</main>
 		<Footer />
 	</body>
 </html>
 <style>
-	.intro {
-		margin: 1em 0 3em;
+	.hero {
+		margin: 0.5em 0 2.5em;
 	}
-	.lede {
-		font-size: 1.2em;
-		color: var(--text);
+	.hero h1 {
+		font-size: 2.9em;
+		line-height: 1.12;
+		font-weight: 500;
+		letter-spacing: -0.01em;
+		margin-bottom: 0.6em;
 	}
-	.intro-links {
+	.hero h1 em {
+		font-style: italic;
+		color: var(--accent);
+	}
+	.hero-name {
+		font-weight: 700;
+		color: var(--heading);
+		text-decoration: none;
+	}
+	.hero-sub {
+		display: flex;
+		align-items: center;
+		gap: 1em;
+	}
+	.hero-sub p {
+		margin: 0;
+		color: var(--muted);
+		font-size: 1.02em;
+	}
+	.hero-links {
+		display: block;
+		margin-top: 0.3em;
+		font-size: 0.92em;
+	}
+	.avatar {
+		width: 56px;
+		height: 56px;
+		border-radius: 50%;
+		flex: none;
+		object-fit: cover;
+	}
+	.topics {
+		margin-bottom: 2.5em;
+	}
+	.chip.all {
+		background: transparent;
+		border: 1px solid var(--border);
 		color: var(--muted);
 	}
 	.section-head {
-		font-size: 1.1em;
+		font-family: var(--font-body);
+		font-size: 0.85em;
+		font-weight: 600;
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: 0.08em;
 		color: var(--muted);
-		margin-bottom: 0;
+		margin: 0 0 0.9em;
+	}
+	.all-posts {
+		margin-top: 1.2em;
+		font-weight: 600;
+	}
+	@media (max-width: 720px) {
+		.hero h1 {
+			font-size: 2.1em;
+		}
 	}
 </style>
