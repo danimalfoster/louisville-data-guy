@@ -77,9 +77,15 @@ stores," "last month's revenue") into the right tool and the right filters. When
 ambiguous, the tool returns a list of candidates instead of guessing. If someone asks about a brand and
 the name matches two or three things, the AI shows them the options and asks which one they meant.
 
+The tools also do the math. They hand the AI finished numbers rather than raw rows to add up, because a
+model working over raw rows can misread a column or slip on arithmetic and still sound completely sure
+of itself. I'd much rather the AI report a number than calculate one.
+
 The automation tools are different. Each one encodes a business process step by step, with validation
-built into every step, so there's no guesswork about what happens next. They're closer to scenario 2
-from the last post than to a free-roaming agent. This group also includes diagnostic tools that monitor
+built into every step, so there's no guesswork about what happens next. Using the scenarios from the
+last post, the AI deciding which tool to call is scenario 3, but once the tool is running, it's
+scenario 1, plain automation. The AI picks the process, and the code runs it. This group also includes
+diagnostic tools that monitor
 [data quality](/glossary/data-quality/) and database integrity. Those tools find problems and report
 them. A person decides what to do about them.
 
@@ -117,7 +123,11 @@ knowledge of your database, the same way it would for a new analyst on their fir
 It also pays off well beyond the first project. Every project since then has started from that same
 foundation, so I'm not explaining the database from scratch each time. If you've read about
 [semantic layers](/glossary/semantic-layer/), a data dictionary covers a lot of the same ground, and
-it's a much smaller project to get started on.
+it's a much smaller project to get started on. There is one big difference, though. A dictionary is
+something the AI reads and then has to follow, while a semantic layer is code that calculates a metric
+the same way every time. That's why the rules that matter most, like how a metric gets aggregated, also
+live in the tool code and not only in the dictionary. The dictionary helps the AI understand the
+question and pick the right tool, and the tool makes sure the math comes out the same every time.
 
 ## Testing, and accepting that it's never finished
 
