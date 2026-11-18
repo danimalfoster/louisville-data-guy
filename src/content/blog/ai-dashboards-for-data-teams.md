@@ -3,7 +3,6 @@ title: 'AI-Generated Dashboards: When a One-Off HTML Page Is Enough and When to 
 description: 'How I build dashboards with Claude and an MCP server, the difference between a one-off HTML page and a hosted web app, and how to decide which one a request needs.'
 pubDate: '2026-11-18'
 terms: ['model-context-protocol', 'data-governance', 'data-dictionary']
-draft: true
 ---
 
 AI can build you a dashboard in a few minutes now, but there are two very different things people mean
