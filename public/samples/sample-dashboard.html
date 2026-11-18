@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Sample Sales Dashboard</title>
+<style>
+	:root {
+		--bg: #ffffff;
+		--surface: #f4f7fb;
+		--card: #ffffff;
+		--text: #1b2733;
+		--muted: #5a6b7d;
+		--border: #dde5ee;
+		--grid: #e8eef4;
+		--accent: #1d4e89;
+		--accent-soft: #d9e5f3;
+		--good: #1f7a4d;
+		--bad: #b3261e;
+		--note-bg: #fff6d6;
+		--note-text: #5c4500;
+	}
+	@media (prefers-color-scheme: dark) {
+		:root:not([data-theme='light']) {
+			--bg: #0f1720;
+			--surface: #16212d;
+			--card: #1b2836;
+			--text: #e6edf4;
+			--muted: #9fb0c2;
+			--border: #2c3c4e;
+			--grid: #243344;
+			--accent: #6fa3e0;
+			--accent-soft: #24405f;
+			--good: #5cc58f;
+			--bad: #f08a80;
+			--note-bg: #3a3118;
+			--note-text: #f3dc9a;
+		}
+	}
+	* { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--surface);
+		color: var(--text);
+		font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+		font-size: 15px;
+		line-height: 1.5;
+	}
+	.wrap { max-width: 1040px; margin: 0 auto; padding: 20px 16px 32px; }
+	header h1 { font-size: 1.4rem; margin: 0; }
+	header p { margin: 2px 0 0; color: var(--muted); font-size: 0.9rem; }
+	.note {
+		margin: 14px 0;
+		padding: 8px 12px;
+		border-radius: 6px;
+		background: var(--note-bg);
+		color: var(--note-text);
+		font-size: 0.85rem;
+	}
+	.filters { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; margin: 14px 0 16px; }
+	.filters label { font-size: 0.8rem; color: var(--muted); margin-right: 6px; }
+	.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: var(--card); }
+	.seg button {
+		border: 0;
+		background: transparent;
+		color: var(--text);
+		font: inherit;
+		font-size: 0.85rem;
+		padding: 5px 11px;
+		cursor: pointer;
+	}
+	.seg button + button { border-left: 1px solid var(--border); }
+	.seg button[aria-pressed='true'] { background: var(--accent); color: #fff; font-weight: 600; }
+	@media (prefers-color-scheme: dark) { .seg button[aria-pressed='true'] { color: #0f1720; } }
+	.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+	.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+	.kpi .label { font-size: 0.8rem; color: var(--muted); }
+	.kpi .value { font-size: 1.6rem; font-weight: 700; margin: 2px 0; font-variant-numeric: tabular-nums; }
+	.kpi .delta { font-size: 0.8rem; color: var(--muted); }
+	.up { color: var(--good); font-weight: 600; }
+	.down { color: var(--bad); font-weight: 600; }
+	.charts { display: grid; grid-template-columns: 3fr 2fr; gap: 12px; margin-top: 12px; }
+	.card h2 { font-size: 0.95rem; margin: 0 0 2px; }
+	.card .sub { font-size: 0.8rem; color: var(--muted); margin: 0 0 8px; }
+	svg { display: block; width: 100%; height: auto; overflow: visible; }
+	.axis text { fill: var(--muted); font-size: 11px; }
+	.gridline { stroke: var(--grid); stroke-width: 1; }
+	.tip {
+		position: fixed;
+		pointer-events: none;
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		padding: 6px 10px;
+		font-size: 0.8rem;
+		box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+		display: none;
+		z-index: 5;
+	}
+	.tip strong { display: block; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
+	.tip span { color: var(--muted); }
+	.bar:hover, .bar:focus { opacity: 0.8; outline: none; }
+	.tablecard { margin-top: 12px; }
+	.tablehead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+	.tablecard button.link { background: none; border: 0; color: var(--accent); font: inherit; font-size: 0.85rem; cursor: pointer; padding: 0; }
+	.tablewrap { overflow-x: auto; }
+	table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 8px; font-variant-numeric: tabular-nums; }
+	th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+	th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: left; }
+	th { color: var(--muted); font-weight: 600; font-size: 0.78rem; }
+	@media (max-width: 760px) {
+		.kpis { grid-template-columns: repeat(2, 1fr); }
+		.charts { grid-template-columns: 1fr; }
+		.kpi .value { font-size: 1.3rem; }
+	}
+</style>
+</head>
+<body>
+<div class="wrap">
+	<header>
+		<h1>Riverside Coffee Co. Weekly Sales</h1>
+		<p>Sample dashboard built for louisvilledataguy.com. The company and every number on this page are made up.</p>
+	</header>
+	<p class="note">Snapshot: data as of Friday, November 13, 2026. This is a one-off HTML file, so it will not update when the underlying data changes.</p>
+
+	<div class="filters" role="group" aria-label="Filters">
+		<div><label id="rangeLbl">Date range</label><span class="seg" id="range" aria-labelledby="rangeLbl"></span></div>
+		<div><label id="regionLbl">Region</label><span class="seg" id="region" aria-labelledby="regionLbl"></span></div>
+	</div>
+
+	<section class="kpis" id="kpis" aria-label="Key numbers"></section>
+
+	<section class="charts">
+		<div class="card">
+			<h2>Weekly revenue</h2>
+			<p class="sub" id="lineSub"></p>
+			<svg id="line" viewBox="0 0 600 260" role="img" aria-label="Weekly revenue line chart"></svg>
+		</div>
+		<div class="card">
+			<h2>Revenue by location</h2>
+			<p class="sub">Top 8 for the selected range</p>
+			<svg id="bars" viewBox="0 0 400 260" role="img" aria-label="Revenue by location bar chart"></svg>
+		</div>
+	</section>
+
+	<section class="card tablecard">
+		<div class="tablehead">
+			<h2>All locations</h2>
+			<button class="link" id="toggle" aria-expanded="false">Show table</button>
+		</div>
+		<div class="tablewrap" id="tablewrap" hidden>
+			<table>
+				<thead><tr><th>Location</th><th>Region</th><th>Revenue</th><th>Transactions</th><th>Avg ticket</th><th>vs prior period</th></tr></thead>
+				<tbody id="tbody"></tbody>
+			</table>
+		</div>
+	</section>
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+(() => {
+	// ---- Made-up data, generated from a fixed seed so it is the same every load ----
+	let seed = 42;
+	const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+	const regions = ['Downtown', 'East End', 'South End'];
+	const names = {
+		Downtown: ['Main & 4th', 'Riverfront', 'Museum Row', 'Market St', 'Waterfront Park', 'Convention Ctr'],
+		'East End': ['Frankfort Ave', 'Shelbyville Rd', 'Middletown', 'Lyndon', 'Brownsboro'],
+		'South End': ['Iroquois', 'Fairdale', 'Okolona', 'Preston Hwy', 'Valley Station'],
+	};
+	const WEEKS = 26;
+	const end = new Date(2026, 10, 13);
+	const weeks = Array.from({ length: WEEKS }, (_, i) => new Date(end.getTime() - (WEEKS - 1 - i) * 7 * 864e5));
+	const locations = [];
+	for (const r of regions) {
+		for (const n of names[r]) {
+			const base = 9000 + rand() * 9000;
+			const ticket = 6.2 + rand() * 2.2;
+			const trend = -0.004 + rand() * 0.014;
+			const opened = rand() < 0.12 ? 8 + Math.floor(rand() * 6) : 0;
+			const rows = weeks.map((w, i) => {
+				if (i < opened) return { rev: 0, tx: 0 };
+				const season = 1 + 0.08 * Math.sin((i / WEEKS) * Math.PI * 2 + 1.2);
+				const rev = base * season * (1 + trend * i) * (0.92 + rand() * 0.16);
+				const t = ticket * (0.97 + rand() * 0.06);
+				return { rev, tx: rev / t };
+			});
+			locations.push({ name: n, region: r, rows });
+		}
+	}
+
+	// ---- State and helpers ----
+	const state = { range: 13, region: 'All' };
+	const money = (v) => '$' + (v >= 1e6 ? (v / 1e6).toFixed(2) + 'M' : v >= 1e3 ? Math.round(v / 1e3) + 'K' : v.toFixed(2));
+	const moneyFull = (v) => '$' + Math.round(v).toLocaleString('en-US');
+	const num = (v) => Math.round(v).toLocaleString('en-US');
+	const fmtDate = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+	const pct = (a, b) => (b ? (a - b) / b : 0);
+	const NS = 'http://www.w3.org/2000/svg';
+	const el = (tag, attrs = {}, parent) => {
+		const e = document.createElementNS(NS, tag);
+		for (const k in attrs) e.setAttribute(k, attrs[k]);
+		if (parent) parent.appendChild(e);
+		return e;
+	};
+	const tip = document.getElementById('tip');
+	const showTip = (evt, value, label) => {
+		tip.replaceChildren();
+		const s = document.createElement('strong'); s.textContent = value;
+		const l = document.createElement('span'); l.textContent = label;
+		tip.append(s, l);
+		tip.style.display = 'block';
+		const x = evt.clientX ?? evt.target.getBoundingClientRect().right;
+		const y = evt.clientY ?? evt.target.getBoundingClientRect().top;
+		const w = tip.offsetWidth;
+		tip.style.left = Math.min(x + 12, window.innerWidth - w - 8) + 'px';
+		tip.style.top = y - 44 + 'px';
+	};
+	const hideTip = () => (tip.style.display = 'none');
+
+	function slice() {
+		const locs = locations.filter((l) => state.region === 'All' || l.region === state.region);
+		const n = state.range;
+		const cur = [WEEKS - n, WEEKS];
+		const prev = [Math.max(0, WEEKS - 2 * n), WEEKS - n];
+		const sum = (l, [a, b], k) => l.rows.slice(a, b).reduce((s, r) => s + r[k], 0);
+		const perLoc = locs.map((l) => ({
+			...l,
+			rev: sum(l, cur, 'rev'),
+			tx: sum(l, cur, 'tx'),
+			prevRev: sum(l, prev, 'rev'),
+		}));
+		const weekly = weeks.slice(cur[0]).map((d, j) => ({ d, rev: locs.reduce((s, l) => s + l.rows[cur[0] + j].rev, 0) }));
+		const tot = (k) => perLoc.reduce((s, l) => s + l[k], 0);
+		const prevTx = locs.reduce((s, l) => s + sum(l, prev, 'tx'), 0);
+		return { perLoc, weekly, rev: tot('rev'), tx: tot('tx'), prevRev: tot('prevRev'), prevTx, comparable: prev[1] - prev[0] === n };
+	}
+
+	// ---- Filters ----
+	function seg(id, options, key) {
+		const host = document.getElementById(id);
+		options.forEach(([val, text]) => {
+			const b = document.createElement('button');
+			b.type = 'button';
+			b.textContent = text;
+			b.setAttribute('aria-pressed', String(state[key] === val));
+			b.onclick = () => {
+				state[key] = val;
+				host.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', 'false'));
+				b.setAttribute('aria-pressed', 'true');
+				render();
+			};
+			host.appendChild(b);
+		});
+	}
+	seg('range', [[4, 'Last 4 weeks'], [13, 'Last 13 weeks']], 'range');
+	seg('region', [['All', 'All'], ...regions.map((r) => [r, r])], 'region');
+
+	// ---- KPI tiles ----
+	function kpis(s) {
+		const active = s.perLoc.filter((l) => l.rows[WEEKS - 1].rev > 0).length;
+		const ticket = s.rev / s.tx;
+		const prevTicket = s.prevRev / s.prevTx;
+		const tiles = [
+			['Revenue', money(s.rev), pct(s.rev, s.prevRev)],
+			['Transactions', num(s.tx), pct(s.tx, s.prevTx)],
+			['Average ticket', '$' + ticket.toFixed(2), pct(ticket, prevTicket)],
+			['Active locations', String(active), null],
+		];
+		const host = document.getElementById('kpis');
+		host.replaceChildren();
+		for (const [label, value, d] of tiles) {
+			const c = document.createElement('div');
+			c.className = 'card kpi';
+			const a = document.createElement('div'); a.className = 'label'; a.textContent = label;
+			const b = document.createElement('div'); b.className = 'value'; b.textContent = value;
+			const e = document.createElement('div'); e.className = 'delta';
+			if (d === null) e.textContent = 'Open in the latest week';
+			else {
+				const sp = document.createElement('span');
+				sp.className = d >= 0 ? 'up' : 'down';
+				sp.textContent = (d >= 0 ? '▲ ' : '▼ ') + Math.abs(d * 100).toFixed(1) + '%';
+				e.append(sp, document.createTextNode(' vs prior ' + state.range + ' weeks'));
+			}
+			c.append(a, b, e);
+			host.appendChild(c);
+		}
+	}
+
+	// ---- Line chart with crosshair ----
+	function line(s) {
+		const svg = document.getElementById('line');
+		svg.replaceChildren();
+		document.getElementById('lineSub').textContent = (state.region === 'All' ? 'All regions' : state.region) + ', week ending ' + fmtDate(s.weekly[0].d) + ' to ' + fmtDate(s.weekly[s.weekly.length - 1].d);
+		const W = Math.max(280, svg.clientWidth || 600), H = 240, L = 52, R = 12, T = 12, B = 28;
+		svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+		const vals = s.weekly.map((w) => w.rev);
+		const max = Math.max(...vals) * 1.08;
+		const step = Math.pow(10, Math.floor(Math.log10(max / 4)));
+		const tick = Math.ceil(max / 4 / step) * step;
+		const yMax = tick * 4;
+		const x = (i) => L + (i * (W - L - R)) / Math.max(1, vals.length - 1);
+		const y = (v) => T + (H - T - B) * (1 - v / yMax);
+		const ax = el('g', { class: 'axis' }, svg);
+		for (let k = 0; k <= 4; k++) {
+			el('line', { class: 'gridline', x1: L, x2: W - R, y1: y(k * tick), y2: y(k * tick) }, ax);
+			el('text', { x: L - 8, y: y(k * tick) + 4, 'text-anchor': 'end' }, ax).textContent = money(k * tick);
+		}
+		const every = Math.max(1, Math.ceil(vals.length / Math.max(2, Math.floor(W / 90))));
+		s.weekly.forEach((w, i) => {
+			if ((i % every === 0 && x(vals.length - 1) - x(i) > 60) || i === vals.length - 1) el('text', { x: x(i), y: H - 8, 'text-anchor': 'middle' }, ax).textContent = fmtDate(w.d);
+		});
+		const d = vals.map((v, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1)).join(' ');
+		el('path', { d: d + ` L${x(vals.length - 1)} ${y(0)} L${x(0)} ${y(0)} Z`, fill: 'var(--accent-soft)', opacity: 0.5 }, svg);
+		el('path', { d, fill: 'none', stroke: 'var(--accent)', 'stroke-width': 2, 'stroke-linejoin': 'round' }, svg);
+		const last = vals.length - 1;
+		el('circle', { cx: x(last), cy: y(vals[last]), r: 4, fill: 'var(--accent)', stroke: 'var(--card)', 'stroke-width': 2 }, svg);
+		const hair = el('line', { x1: 0, x2: 0, y1: T, y2: H - B, stroke: 'var(--muted)', 'stroke-width': 1, 'stroke-dasharray': '3 3', visibility: 'hidden' }, svg);
+		const dot = el('circle', { r: 5, fill: 'var(--accent)', stroke: 'var(--card)', 'stroke-width': 2, visibility: 'hidden' }, svg);
+		const hit = el('rect', { x: L, y: T, width: W - L - R, height: H - T - B, fill: 'transparent' }, svg);
+		hit.addEventListener('pointermove', (evt) => {
+			const pt = svg.createSVGPoint(); pt.x = evt.clientX; pt.y = evt.clientY;
+			const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+			const i = Math.max(0, Math.min(last, Math.round(((p.x - L) / (W - L - R)) * last)));
+			hair.setAttribute('x1', x(i)); hair.setAttribute('x2', x(i)); hair.setAttribute('visibility', 'visible');
+			dot.setAttribute('cx', x(i)); dot.setAttribute('cy', y(vals[i])); dot.setAttribute('visibility', 'visible');
+			showTip(evt, moneyFull(vals[i]), 'Week ending ' + fmtDate(s.weekly[i].d));
+		});
+		hit.addEventListener('pointerleave', () => { hair.setAttribute('visibility', 'hidden'); dot.setAttribute('visibility', 'hidden'); hideTip(); });
+	}
+
+	// ---- Horizontal bar chart ----
+	function bars(s) {
+		const svg = document.getElementById('bars');
+		svg.replaceChildren();
+		const top = [...s.perLoc].sort((a, b) => b.rev - a.rev).slice(0, 8);
+		const W = Math.max(260, svg.clientWidth || 400), L = 118, R = 52, T = 4, rowH = 30, barH = 18;
+		const H = T + top.length * rowH;
+		svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+		const max = top[0]?.rev || 1;
+		top.forEach((l, i) => {
+			const yy = T + i * rowH;
+			const w = Math.max(2, ((W - L - R) * l.rev) / max);
+			el('text', { x: L - 8, y: yy + barH / 2 + 4, 'text-anchor': 'end', fill: 'var(--text)', 'font-size': 12 }, svg).textContent = l.name;
+			const r = el('rect', { class: 'bar', x: L, y: yy, width: w, height: barH, rx: 4, fill: 'var(--accent)', tabindex: 0 }, svg);
+			el('rect', { x: L, y: yy, width: Math.min(4, w), height: barH, fill: 'var(--accent)' }, svg);
+			el('text', { x: L + w + 6, y: yy + barH / 2 + 4, fill: 'var(--muted)', 'font-size': 11 }, svg).textContent = money(l.rev);
+			const label = l.name + ' (' + l.region + ')';
+			r.addEventListener('pointermove', (evt) => showTip(evt, moneyFull(l.rev), label));
+			r.addEventListener('focus', (evt) => showTip(evt, moneyFull(l.rev), label));
+			r.addEventListener('pointerleave', hideTip);
+			r.addEventListener('blur', hideTip);
+		});
+	}
+
+	// ---- Table view ----
+	function table(s) {
+		const tb = document.getElementById('tbody');
+		tb.replaceChildren();
+		[...s.perLoc].sort((a, b) => b.rev - a.rev).forEach((l) => {
+			const tr = document.createElement('tr');
+			const ch = l.prevRev ? pct(l.rev, l.prevRev) : null;
+			const cells = [l.name, l.region, moneyFull(l.rev), num(l.tx), l.tx ? '$' + (l.rev / l.tx).toFixed(2) : '-', ch === null ? 'New' : (ch >= 0 ? '+' : '') + (ch * 100).toFixed(1) + '%'];
+			cells.forEach((c) => { const td = document.createElement('td'); td.textContent = c; tr.appendChild(td); });
+			tb.appendChild(tr);
+		});
+	}
+	const toggle = document.getElementById('toggle');
+	toggle.onclick = () => {
+		const wrap = document.getElementById('tablewrap');
+		wrap.hidden = !wrap.hidden;
+		toggle.setAttribute('aria-expanded', String(!wrap.hidden));
+		toggle.textContent = wrap.hidden ? 'Show table' : 'Hide table';
+	};
+
+	function render() {
+		const s = slice();
+		kpis(s); line(s); bars(s); table(s);
+	}
+	render();
+	let rt;
+	window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(render, 150); });
+	// Tell an embedding page how tall the dashboard is, so it can size its iframe.
+	const postHeight = () => { if (window.parent !== window) window.parent.postMessage({ sampleDashboardHeight: document.body.offsetHeight }, location.origin); };
+	new ResizeObserver(postHeight).observe(document.body);
+})();
+</script>
+</body>
+</html>
