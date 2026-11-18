@@ -75,6 +75,22 @@ natural to him. Medium-length sentences joined with *so*, *which*, *because*; no
 - Generic hypotheticals ("A regional bank...") when a real, generalized experience of Daniel's fits.
 - Filler like "In practice," "Crucially," "It's worth noting," "Here's the thing," "Let's dive in."
 
+## Titles and headings
+
+Daniel's feedback (2026-11-18): the first titles and section headings sounded like AI. Keep them short
+and plain, the way he'd label something in an email.
+
+- Titles are one idea, in sentence case, ideally under about 8 words. "Not everything needs to be
+  agentic," "How I built our MCP servers," "Building dashboards with AI."
+- No "Topic: subtitle" titles, no stacking two or three ideas into one title ("What X, what Y, and
+  the Z that matters"), and no repeated suffixes like "for Data Teams." Keywords belong in the
+  description and the URL slug.
+- Section headings are plain labels: "Testing," "Guardrails," "Which one to use." No rhetorical
+  questions ("So where's the line?"), no clever phrasing ("Testing, and accepting that it's never
+  finished"), no "What the hype gets wrong."
+- Don't end every post with the same heading. The closing paragraphs can sit under the last section
+  with no heading of their own.
+
 ## Privacy
 
 Use Daniel's real experiences only in generalized form. No employer-internal details, customer or
