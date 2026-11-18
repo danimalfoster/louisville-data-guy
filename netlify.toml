@@ -3,9 +3,9 @@
   publish = "dist"
   # Each production deploy costs 15 Netlify credits (the free plan has 300 a month).
   # Skip the build when a push only touches files that are not part of the website.
-  # Exit code 0 = skip, anything else = build. If the previous commit is unknown,
-  # git diff fails and the build runs, which is the safe default.
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)docs' ':(exclude)README.md' ':(exclude)AGENTS.md' ':(exclude).claude' ':(exclude).gitignore' ':(exclude).github'"
+  # Exit code 0 = skip, anything else = build. If the previous commit is unknown or is
+  # the same commit (first build, cleared cache, manual redeploy), it always builds.
+  ignore = '[ -n "$CACHED_COMMIT_REF" ] && [ "$CACHED_COMMIT_REF" != "$COMMIT_REF" ] && git diff --quiet "$CACHED_COMMIT_REF" "$COMMIT_REF" -- . ":(exclude)docs" ":(exclude)README.md" ":(exclude)AGENTS.md" ":(exclude).claude" ":(exclude).gitignore" ":(exclude).github"'
 
 [build.environment]
   NODE_VERSION = "24"
