@@ -21,6 +21,19 @@ npm run build    # production build into dist/ (drafts hidden)
 Posts with `draft: true` never appear on the live site, in the RSS feed, or in the sitemap,
 even if merged by accident.
 
+### Keeping Netlify credits down
+
+The site is on Netlify's free plan, which has 300 credits a month and pauses the site if they run
+out. Each production deploy (every merge to `main` that changes the site) costs 15 credits, so that's
+about 20 deploys a month. Deploy Previews are free.
+
+- Batch small changes. Fixes, revisions, and config changes wait on their branches and get merged into
+  the next post's branch, so they go live in the same deploy as the post. Only merge something on its
+  own when it can't wait.
+- `netlify.toml` skips the build when a push only changes files that aren't part of the website
+  (`docs/`, `README.md`, `AGENTS.md`, `.claude/`, `.gitignore`, `.github/`).
+- Check the balance on the Netlify team's Usage page before a busy publishing week.
+
 ## Glossary
 
 Terms live in `src/content/glossary/<slug>.md` and publish at `/glossary/<slug>/`, with an A-Z index
