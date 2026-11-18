@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { chipName, getTerms } from '../utils/posts';
 import FormattedDate from './FormattedDate.astro';
 
 interface Props {
@@ -7,22 +8,42 @@ interface Props {
 }
 const { posts } = Astro.props;
 const minutes = (body = '') => Math.max(1, Math.round(body.split(/\s+/).length / 230));
+const termName = new Map((await getTerms()).map((t) => [t.id, chipName(t.data.term)]));
 ---
 
 <ul class="post-list">
 	{
-		posts.map((post) => (
-			<li>
-				<a href={`/blog/${post.id}/`} class="post-title">
-					{post.data.title}
-				</a>
-				{post.data.draft && <span class="draft-tag">draft</span>}
-				<p class="post-desc">{post.data.description}</p>
-				<p class="post-meta">
-					<FormattedDate date={post.data.pubDate} /> · {minutes(post.body)} min read
-				</p>
-			</li>
-		))
+		posts.map((post) => {
+			const tags = (post.data.terms ?? []).filter((t) => termName.has(t.id)).slice(0, 4);
+			return (
+				<li class="card">
+					<p class="post-meta">
+						<FormattedDate date={post.data.pubDate} /> · {minutes(post.body)} min read
+						{post.data.draft && <span class="draft-tag">draft</span>}
+					</p>
+					<h3 class="post-title">
+						<a href={`/blog/${post.id}/`}>{post.data.title}</a>
+					</h3>
+					<p class="post-desc">{post.data.description}</p>
+					<div class="card-foot">
+						{tags.length > 0 && (
+							<ul class="chips" aria-label="Topics">
+								{tags.map((t) => (
+									<li>
+										<a class="chip" href={`/glossary/${t.id}/`}>
+											{termName.get(t.id)}
+										</a>
+									</li>
+								))}
+							</ul>
+						)}
+						<a class="read-more" href={`/blog/${post.id}/`} aria-hidden="true" tabindex="-1">
+							Read more →
+						</a>
+					</div>
+				</li>
+			);
+		})
 	}
 </ul>
 <style>
@@ -30,35 +51,76 @@ const minutes = (body = '') => Math.max(1, Math.round(body.split(/\s+/).length /
 		list-style: none;
 		padding: 0;
 		margin: 0;
+		display: grid;
+		gap: 1em;
 	}
-	.post-list li {
-		padding: 1.1em 0;
-		border-bottom: 1px solid var(--border);
+	.card {
+		position: relative;
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		padding: 1.2em 1.4em 1.1em;
+		box-shadow: var(--shadow);
+		transition:
+			transform 0.15s ease,
+			border-color 0.15s ease;
+	}
+	.card:hover {
+		transform: translateY(-2px);
+		border-color: var(--accent);
 	}
 	.post-title {
-		font-family: var(--font-head);
-		font-weight: var(--head-weight);
-		font-size: 1.2em;
+		margin: 0.15em 0 0.3em;
+		font-size: 1.45em;
+		line-height: 1.2;
+	}
+	.post-title a {
+		color: var(--heading);
 		text-decoration: none;
 	}
-	.post-title:hover {
-		text-decoration: underline;
+	.post-title a:hover {
+		color: var(--accent);
 	}
 	.post-desc {
-		margin: 0.3em 0;
+		margin: 0 0 0.8em;
+		color: var(--text);
+		font-size: 0.95em;
 	}
 	.post-meta {
 		margin: 0;
 		color: var(--muted);
-		font-size: 0.85em;
+		font-size: 0.8em;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+	.card-foot {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.8em;
+		flex-wrap: wrap;
+	}
+	.read-more {
+		font-size: 0.9em;
+		font-weight: 600;
+		text-decoration: none;
+		margin-left: auto;
 	}
 	.draft-tag {
 		margin-left: 0.5em;
 		padding: 0.1em 0.5em;
 		border-radius: 4px;
-		background: #fff3cd;
-		color: #664d03;
-		font-size: 0.7em;
-		vertical-align: middle;
+		background: var(--draft-bg);
+		color: var(--draft-text);
+		font-size: 0.85em;
+		letter-spacing: 0;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.card {
+			transition: none;
+		}
+		.card:hover {
+			transform: none;
+		}
 	}
 </style>

@@ -1,0 +1,170 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Search | ${SITE_TITLE}`} description="Search posts and glossary terms." />
+		<meta name="robots" content="noindex" />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Search</h1>
+			<form id="search-form" role="search" onsubmit="return false">
+				<label for="q" class="sr-only">Search posts and glossary terms</label>
+				<input
+					id="q"
+					type="search"
+					name="q"
+					placeholder="Try “semantic layer” or “guardrails”"
+					autocomplete="off"
+					autofocus
+				/>
+			</form>
+			<p id="status" class="status" aria-live="polite"></p>
+			<ol id="results" class="results"></ol>
+			<noscript><p>Search needs JavaScript. You can browse the <a href="/blog">blog</a> or the <a href="/glossary">glossary</a> instead.</p></noscript>
+		</main>
+		<Footer />
+		<script>
+			type Item = { type: string; title: string; url: string; summary: string; date?: string; tags: string[]; text: string };
+
+			const input = document.getElementById('q') as HTMLInputElement;
+			const status = document.getElementById('status')!;
+			const list = document.getElementById('results')!;
+			let items: Item[] = [];
+
+			const norm = (s: string) => s.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '');
+
+			function snippet(text: string, words: string[]) {
+				const lower = norm(text);
+				const hit = Math.min(...words.map((w) => lower.indexOf(w)).filter((i) => i >= 0));
+				if (!isFinite(hit)) return '';
+				const start = Math.max(0, hit - 70);
+				return (start > 0 ? '…' : '') + text.slice(start, start + 180).trim() + '…';
+			}
+
+			function search(q: string) {
+				const words = norm(q).split(/\s+/).filter(Boolean);
+				list.replaceChildren();
+				if (!words.length) {
+					status.textContent = items.length ? `Search ${items.length} posts and glossary terms.` : '';
+					return;
+				}
+				const scored = items
+					.map((it) => {
+						const title = norm(it.title);
+						const meta = norm(it.summary + ' ' + it.tags.join(' '));
+						const body = norm(it.text);
+						let score = 0;
+						for (const w of words) {
+							if (title.includes(w)) score += 10;
+							else if (meta.includes(w)) score += 4;
+							else if (body.includes(w)) score += 1;
+							else return null; // every word has to appear somewhere
+						}
+						if (it.type === 'Post') score += 0.5;
+						return { it, score };
+					})
+					.filter((x): x is { it: Item; score: number } => x !== null)
+					.sort((a, b) => b.score - a.score);
+
+				status.textContent = scored.length
+					? `${scored.length} result${scored.length === 1 ? '' : 's'}`
+					: 'No results. Try a different word, or browse the glossary.';
+				for (const { it } of scored.slice(0, 30)) {
+					const li = document.createElement('li');
+					const type = document.createElement('span');
+					type.className = 'type';
+					type.textContent = it.type + (it.date ? ' · ' + it.date : '');
+					const a = document.createElement('a');
+					a.href = it.url;
+					a.textContent = it.title;
+					const p = document.createElement('p');
+					const inTitleOrSummary = words.every((w) => norm(it.title + ' ' + it.summary).includes(w));
+					p.textContent = inTitleOrSummary ? it.summary : snippet(it.text, words) || it.summary;
+					li.append(type, a, p);
+					list.appendChild(li);
+				}
+			}
+
+			const params = new URLSearchParams(location.search);
+			input.value = params.get('q') ?? '';
+			fetch('/search.json')
+				.then((r) => r.json())
+				.then((data: Item[]) => {
+					items = data;
+					search(input.value);
+				})
+				.catch(() => (status.textContent = 'Search could not load. Please try again later.'));
+
+			let timer: number | undefined;
+			input.addEventListener('input', () => {
+				clearTimeout(timer);
+				timer = window.setTimeout(() => {
+					search(input.value);
+					const url = new URL(location.href);
+					if (input.value) url.searchParams.set('q', input.value);
+					else url.searchParams.delete('q');
+					history.replaceState(null, '', url);
+				}, 120);
+			});
+		</script>
+	</body>
+</html>
+<style>
+	input[type='search'] {
+		width: 100%;
+		font: inherit;
+		font-size: 1.1em;
+		padding: 0.7em 0.9em;
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		background: var(--card);
+		color: var(--text);
+		box-shadow: var(--shadow);
+	}
+	input[type='search']:focus {
+		outline: 2px solid var(--accent);
+		outline-offset: 1px;
+	}
+	.status {
+		color: var(--muted);
+		font-size: 0.9em;
+		margin: 0.8em 0 0.4em;
+	}
+	.results {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	.results :global(li) {
+		padding: 1em 0;
+		border-bottom: 1px solid var(--border);
+	}
+	.results :global(.type) {
+		display: block;
+		color: var(--muted);
+		font-size: 0.75em;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+	}
+	.results :global(a) {
+		font-family: var(--font-head);
+		font-weight: var(--head-weight);
+		font-size: 1.25em;
+		line-height: 1.3;
+		display: inline-block;
+		margin-top: 0.15em;
+		text-decoration: none;
+	}
+	.results :global(p) {
+		margin: 0.2em 0 0;
+		font-size: 0.95em;
+	}
+</style>

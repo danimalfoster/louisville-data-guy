@@ -5,6 +5,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import { chipName, getTerms } from '../utils/posts';
 
 // pubDate is optional so standalone pages (like About) can use this layout without a date.
 type Props = Omit<CollectionEntry<'blog'>['data'], 'pubDate' | 'draft'> & {
@@ -12,7 +13,11 @@ type Props = Omit<CollectionEntry<'blog'>['data'], 'pubDate' | 'draft'> & {
 	draft?: boolean;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, draft } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, draft, terms = [] } = Astro.props;
+const allTerms = await getTerms();
+const tags = terms
+	.map((r) => allTerms.find((t) => t.id === r.id))
+	.filter((t) => t !== undefined);
 ---
 
 <!doctype html>
@@ -40,6 +45,19 @@ const { title, description, pubDate, updatedDate, heroImage, draft } = Astro.pro
 							</p>
 						)
 					}
+					{
+						tags.length > 0 && (
+							<ul class="chips tags" aria-label="Topics">
+								{tags.map((t) => (
+									<li>
+										<a class="chip" href={`/glossary/${t.id}/`} title={t.data.short}>
+											{chipName(t.data.term)}
+										</a>
+									</li>
+								))}
+							</ul>
+						)
+					}
 					{draft && <p class="draft-banner">DRAFT: not visible on the live site</p>}
 				</header>
 				<slot />
@@ -58,12 +76,15 @@ const { title, description, pubDate, updatedDate, heroImage, draft } = Astro.pro
 		color: var(--muted);
 		margin: 0;
 	}
+	.tags {
+		margin-top: 0.8em;
+	}
 	.hero {
 		margin-bottom: 1.5em;
 	}
 	.draft-banner {
-		background: #fff3cd;
-		color: #664d03;
+		background: var(--draft-bg);
+		color: var(--draft-text);
 		padding: 0.5em 1em;
 		border-radius: 4px;
 		font-weight: 700;
