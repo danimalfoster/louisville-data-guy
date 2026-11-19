@@ -102,6 +102,7 @@ work for his approval during review.
 
 ## Glossary entries
 
+Term names use title case, the same as post titles ("Data Dictionary," "Large Language Model (LLM)").
 Keep the `short` definition (it powers the definition box, the A-Z page, and search snippets). In the
 body: say where the reader is likely to run into the term, explain it plainly, ground it in a real
 example (ideally Daniel's), give his recommendation, and note what to watch out for. Use headings only

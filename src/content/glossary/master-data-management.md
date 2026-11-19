@@ -1,5 +1,5 @@
 ---
-term: 'Master data management (MDM)'
+term: 'Master Data Management (MDM)'
 short: 'The practice of creating one trusted, shared record for core business entities, such as customers, products, and suppliers, across all systems.'
 category: 'Data management'
 related: ['data-governance', 'data-quality', 'dimension-table']

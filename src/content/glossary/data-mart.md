@@ -1,5 +1,5 @@
 ---
-term: 'Data mart'
+term: 'Data Mart'
 short: 'A smaller, subject-focused slice of a data warehouse built for one department or business area, such as finance or marketing.'
 category: 'Data warehousing'
 related: ['data-warehouse', 'dimensional-modeling', 'dimension-table']

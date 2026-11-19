@@ -1,5 +1,5 @@
 ---
-term: 'AI agent'
+term: 'AI Agent'
 short: 'An AI system that works toward a goal by planning steps, using tools, checking results, and adjusting, rather than giving a single one-shot answer.'
 category: 'AI'
 related: ['model-context-protocol', 'large-language-model', 'text-to-sql', 'hallucination']

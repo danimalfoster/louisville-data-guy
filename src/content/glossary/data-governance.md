@@ -1,5 +1,5 @@
 ---
-term: 'Data governance'
+term: 'Data Governance'
 short: 'The roles, rules, and decisions that determine who owns data, what it means, who can use it, and how its quality is maintained.'
 category: 'Data management'
 related: ['data-quality', 'master-data-management', 'data-catalog', 'data-lineage']

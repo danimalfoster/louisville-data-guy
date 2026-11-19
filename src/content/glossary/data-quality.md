@@ -1,5 +1,5 @@
 ---
-term: 'Data quality'
+term: 'Data Quality'
 short: 'How well data fits its intended use, usually measured by accuracy, completeness, consistency, timeliness, validity, and uniqueness.'
 category: 'Data management'
 related: ['data-governance', 'data-lineage', 'master-data-management', 'etl-vs-elt']

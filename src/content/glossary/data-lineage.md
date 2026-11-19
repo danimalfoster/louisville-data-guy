@@ -1,5 +1,5 @@
 ---
-term: 'Data lineage'
+term: 'Data Lineage'
 short: 'A map of where data comes from, how it is transformed, and where it goes, from source systems through to reports and models.'
 category: 'Data management'
 related: ['data-catalog', 'data-quality', 'data-governance', 'etl-vs-elt']

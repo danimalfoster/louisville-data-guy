@@ -1,5 +1,5 @@
 ---
-term: 'Slowly changing dimension (SCD)'
+term: 'Slowly Changing Dimension (SCD)'
 short: 'A technique for handling changes to descriptive data, like a customer moving, so reports show either current values or history as needed.'
 category: 'Data warehousing'
 related: ['dimension-table', 'dimensional-modeling', 'data-warehouse']

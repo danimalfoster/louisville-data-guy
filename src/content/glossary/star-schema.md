@@ -1,5 +1,5 @@
 ---
-term: 'Star schema'
+term: 'Star Schema'
 short: 'A table layout with one central fact table joined directly to several dimension tables, so the diagram looks like a star.'
 category: 'Data warehousing'
 related: ['dimensional-modeling', 'fact-table', 'dimension-table', 'semantic-layer']

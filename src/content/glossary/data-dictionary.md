@@ -1,5 +1,5 @@
 ---
-term: 'Data dictionary'
+term: 'Data Dictionary'
 short: 'A written reference for a database that explains what each table and column means, how tables join, and the business rules for using the data correctly.'
 category: 'Data management'
 related: ['data-catalog', 'semantic-layer', 'model-context-protocol', 'text-to-sql']
