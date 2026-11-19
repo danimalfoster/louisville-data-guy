@@ -157,6 +157,7 @@ someone asks you a question that would normally turn into a spreadsheet. Build i
 put the date on it, and see how it lands. Once you find the ones people keep coming back to, those are
 your candidates for a hosted app.
 
-Next in the series, I'll get into case studies on what AI integration looks like at companies with
-different levels of AI adoption. If you have questions about any of this, you can find me on
+The next post in the series, [Four Levels of AI on a Data Team](/blog/ai-adoption-levels-for-data-teams/),
+covers what AI integration looks like at companies with different levels of AI adoption. If you have
+questions about any of this, you can find me on
 [LinkedIn](https://www.linkedin.com/in/daniel-foster-04536a75).
