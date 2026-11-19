@@ -22,13 +22,22 @@ worth a look first.
 All of my dashboards are built with Claude Code or Claude Desktop, and the data comes from one of our
 [MCP servers](/glossary/model-context-protocol/). That's what makes this work as well as it does. The
 MCP server already knows how our tables join, how things should be aggregated, and what people mean by
-the terms they use, so when I ask for a dashboard, the numbers come from the same place, and follow the
-same rules, as every other answer the AI gives.
+the terms they use, so when I ask for a dashboard, the numbers come from the same place, and start out
+following the same rules, as every other answer the AI gives.
 
 From there, the process is a conversation. I describe what I want to see, the AI pulls the data through
 the MCP server, and it builds the page. I look at it, ask for changes ("break this out by region," "add
 the prior period for comparison," "the labels on that chart are crowded"), and it updates the page.
 Most of the time I'm looking at a working dashboard after a few rounds of that.
+
+The numbers only follow the MCP server's rules until they reach the page, though. The page itself is
+code the AI wrote, and when you change a filter or look at a percent change, that math runs in the
+page, not in the tools. That's where the mistakes I'd watch for come from. Averaging averages is an
+easy one to make, and so is adding up customer counts across regions, so that a customer who shows up
+in two regions gets counted twice. It's also possible for the AI to type a number straight into the
+page instead of pulling it from a query, and it looks exactly like a real one. Where I can, I'd have
+the tools return the numbers already worked out for each filter, and for anything else, check the
+page's math as part of the review.
 
 To show what this looks like, I had Claude build a sample dashboard for this post. The company and every
 number in it are made up, but the layout is typical of what I'd build for a weekly sales review: a few
@@ -65,7 +74,9 @@ every one-off page.
 
 It's also worth remembering that the data is inside the file. When you send someone an HTML dashboard,
 you're sending them the data behind it too, and it will go wherever they forward it. For anything
-sensitive, that alone can be a reason to build a hosted app instead.
+sensitive, that alone can be a reason to build a hosted app instead. Email can also get in the way.
+Some companies' email filters block HTML attachments outright, because they're a common way to send
+phishing pages, so a shared folder is often the easier way to pass one along.
 
 ## Hosted Web Apps
 
@@ -79,14 +90,23 @@ control over who sees it. Since everyone signs in, you can also shut off one per
 affecting anyone else, the same way we handle the MCP servers.
 
 A big advantage is cost. Most BI tools charge per user, and those licenses add up fast once you try to
-give dashboards to a whole company. A web app doesn't need a license for every viewer. If you don't
-want to pay for licenses, a web app is a great option, and with AI doing most of the building, it's a
-much smaller project than it used to be.
+give dashboards to a whole company. A web app doesn't need a license for every viewer, and with AI
+doing most of the building, it's a much smaller project than it used to be. I think that's going to
+reduce how much a lot of companies need their BI tools, especially for the dashboards most people only
+look at. It isn't free, though. You're paying for hosting and upkeep, and a BI tool gives you things
+like scheduled emails, exports, and row-level security that you'd have to build yourself. Self-service
+is the other thing to think about. In a BI tool, analysts can build their own reports. With web apps,
+every new dashboard goes through whoever builds them.
 
 That said, a hosted app is something you now own. It needs a place to run, it needs to be kept up to
 date, and somebody has to fix it when something changes in the data underneath it. That's a fair
 trade for a dashboard people use every week. It's probably not worth it for a question that only gets
 asked once.
+
+It also needs a security review before anyone signs into it. An app that signs people in and queries
+production data has to store its credentials safely, protect against things like SQL injection, and
+keep its libraries up to date. The AI can write all of that, but someone still has to read it, which
+is the same review bottleneck I talked about in the first post.
 
 ## Which One to Use
 
@@ -99,6 +119,10 @@ If the answer to all of those is no, I build the HTML page. If the answer to any
 probably a hosted app. And sometimes one turns into the other. A one-off page that people keep asking
 me to update is a pretty good sign that it should have been an app.
 
+There's also a middle option. If the question stays the same but the data keeps changing, the same page
+can be rebuilt on a schedule, say every night, so it stays current without becoming a full app. It's
+still a file with the data inside it, so the point about sensitive data still applies.
+
 ## Things to Watch
 
 Right now, I'm the one building these, and I think that's the right setup for a team starting out. Even
@@ -107,9 +131,21 @@ on it, and check that the numbers match what they should. The same benchmarks yo
 server work here too. If the dashboard says revenue was a certain amount last week, compare it to a
 number you already trust.
 
-The guardrails from the first post all still apply. The dashboard gets its data through the same MCP
-server, with the same per-person access and the same checks on every query, so building a dashboard
-doesn't open up a back door to data someone couldn't already see.
+There are a couple of checks that are specific to dashboards. AI-built trend lines often include the
+current week or month even though it isn't over yet, so the last point shows a drop that isn't real.
+And every filter should be clicked through to make sure the totals still come out the way they should.
+
+The guardrails from the first post all still apply. When I build a dashboard in a conversation, the
+data comes through the same MCP server, with the same per-person access and the same checks on every
+query, so building one doesn't give me access to anything I couldn't already see. What happens after
+it's built is a different story. Once a one-off page is sent to someone, the MCP server has no say in
+who opens it, which is why the point above about the data living inside the file matters so much.
+
+Hosted apps work differently. Ours don't go through the MCP server at all. Each one queries the
+database directly with a single service login, and the Entra sign-in controls who can open
+the app. That means the app, not the MCP server, decides what each person sees. Everyone who can sign
+in sees whatever that service login can see, so if different people should see different data, the
+app has to handle that itself, and it's worth checking before the app goes live.
 
 It also helps to keep the design consistent. If every dashboard looks different, people spend their
 time figuring out the layout instead of reading the numbers. I'd keep a short set of instructions for
