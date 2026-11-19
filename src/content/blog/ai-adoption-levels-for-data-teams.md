@@ -2,7 +2,7 @@
 title: 'Four Levels of AI on a Data Team'
 description: 'What data and reporting work looks like at four levels of AI adoption, from no approved tools to everyone connected to company data through governed MCP servers, and what it takes to move from one level to the next.'
 pubDate: '2026-11-19'
-draft: true
+draft: false
 terms: ['model-context-protocol', 'data-dictionary', 'data-governance', 'large-language-model', 'hallucination']
 ---
 
