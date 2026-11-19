@@ -1,5 +1,5 @@
 ---
-title: 'Four levels of AI on a data team'
+title: 'Four Levels of AI on a Data Team'
 description: 'What data and reporting work looks like at four levels of AI adoption, from no approved tools to everyone connected to company data through governed MCP servers, and what it takes to move from one level to the next.'
 pubDate: '2026-11-19'
 draft: true
@@ -24,7 +24,7 @@ how those pieces fit together depending on how far along your company is. I'm us
 4. Everyone has Claude Desktop, plus Claude Code for the people who need it, connected to company data
    through governed MCP servers.
 
-## Level 1: no approved tools
+## Level 1: No Approved Tools
 
 When I started at my current company, there were no approved AI tools. That didn't mean nobody was
 using AI. It meant people were using it on their own, with free accounts, and the company had no say in
@@ -49,7 +49,7 @@ Make it a personal project, though, and keep company code and data out of it unt
 approved. A working demo of something you built does a lot more to get tools approved than a slide about
 what AI could do, and it won't help your case if the demo breaks the policy you're trying to change.
 
-## Level 2: chat for everyone
+## Level 2: Chat for Everyone
 
 The thing that surprised me most about Level 2 was how few people used it. Once an approved chat tool
 was available to everyone, I expected a rush, and it didn't happen. I think a lot of people just didn't
@@ -69,7 +69,7 @@ query, but it can't run it, and it can't see what the data actually looks like.
 That's why Level 2 didn't reduce requests to the data team at all. The chat tool had no access to the
 underlying data, so the business still had to come to us for numbers.
 
-## Level 3: a coding agent for the data team
+## Level 3: A Coding Agent for the Data Team
 
 Once the data team had Claude Code, the AI could look
 at our actual code, update it, or create a new project from scratch. It stopped being someone I
@@ -97,7 +97,7 @@ Anything that changes data gets reviewed by a person before it runs, the agent c
 access it needs to do the job, and production credentials stay out of its reach unless there's a
 specific reason for it.
 
-## Level 4: everyone connected to the data
+## Level 4: Everyone Connected to the Data
 
 At Level 4, business users can ask Claude questions about the data and get the answer I would give,
 because the tools behind it use the same data, the same rules, and the same definitions I would. That
@@ -142,7 +142,7 @@ correct answers, which means testing it against questions you already know the a
 security processes to protect the data, which I covered in the
 [guardrails section of the agentic AI post](/blog/agentic-ai-for-data-teams/).
 
-## Moving up
+## Moving Up
 
 When a team gets stuck at a level, it's usually not one thing. It's some mix of cost, security and
 legal sign-off, leadership interest, and data that isn't ready. In my experience, it's been all of

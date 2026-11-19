@@ -1,5 +1,5 @@
 ---
-title: 'How I built our MCP servers'
+title: 'How I Built Our MCP Servers'
 description: 'How I use MCP servers to answer the business questions that used to land in my inbox, how they are set up, who uses them, and why a data dictionary is the first thing to build.'
 pubDate: '2026-11-17'
 terms: ['model-context-protocol', 'data-dictionary', 'text-to-sql', 'semantic-layer', 'data-quality', 'large-language-model', 'hallucination']
@@ -16,7 +16,7 @@ In my [last post](/blog/agentic-ai-for-data-teams/), I said I'd go deeper on MCP
 post. I'll cover why I built the first one, how they're set up, what the tools actually do, who uses
 them, and what I've learned along the way.
 
-## Why I built the first one
+## Why I Built the First One
 
 Like a lot of people on data teams, I got a steady stream of ad-hoc questions from the business. "Brand
 A's numbers look off today, can you look into it?" "What are the price book entries for this franchise?"
@@ -36,7 +36,7 @@ and get the same answer, without me spending time running a SQL query or pulling
 the whole goal. It wasn't to replace the reports. It was to meet people where they already were, which
 for a lot of them is typing a question to somebody.
 
-## How they're set up
+## How They're Set Up
 
 Our servers are written in Python using FastMCP, a framework that takes care of most of the protocol
 details so you can focus on the tools themselves. People connect to them through Claude Desktop and
@@ -65,7 +65,7 @@ def active_location_count(brand: str | None = None) -> dict:
 That docstring matters more than it looks. It's what the AI reads when it decides whether to use the
 tool and how to fill in the inputs. A vague description gets you vague tool choices.
 
-## Two kinds of tools
+## Two Kinds of Tools
 
 The tools I've built fall into two groups, reporting tools for business users and automation tools for
 our technical users.
@@ -89,7 +89,7 @@ diagnostic tools that monitor
 [data quality](/glossary/data-quality/) and database integrity. Those tools find problems and report
 them. A person decides what to do about them.
 
-## Who uses them
+## Who Uses Them
 
 At this point, the servers cover a pretty wide range of teams, including accounting, account
 management, executives, the call center, sales, and our analysts.
@@ -102,7 +102,7 @@ both in one server would mean a lot of tools most users never need, and more cha
 the wrong one. Keeping them separate makes each server simpler and more accurate for the people using
 it.
 
-## The data dictionary
+## The Data Dictionary
 
 This is the part I'd spend the most time on if I were starting over, and it's the reason for the advice
 at the top.
@@ -142,7 +142,7 @@ something needs to change, whether that's a tool description, a business rule, o
 can usually make the change and test it quickly, and sometimes pivot entirely if the first approach
 wasn't right.
 
-## How people use it
+## How People Use It
 
 Honestly, it's been mixed. Some teams have really embraced it, and some haven't. My view is that people
 who ignore AI tools do so at their own peril, because the gap between people who use them well and
