@@ -9,7 +9,7 @@ collecting more. It's knowing what you have, trusting it, and putting it to work
 
 That's what this blog is about.
 
-## What I'll write about
+## What I'll Write About
 
 - **Data management fundamentals**: modeling, quality, governance, and the unglamorous work that
   makes everything else possible.
@@ -18,7 +18,7 @@ That's what this blog is about.
 - **Lessons from the field**: what works for real teams with real constraints, not just what looks
   good in a vendor demo.
 
-## Who it's for
+## Who It's For
 
 Analysts, engineers, managers, and anyone who's been handed a messy spreadsheet and told to "make it
 make sense."

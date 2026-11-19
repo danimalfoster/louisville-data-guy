@@ -1,5 +1,5 @@
 ---
-term: 'Data lakehouse'
+term: 'Data Lakehouse'
 short: 'An architecture that adds warehouse features, like transactions, schemas, and fast SQL, on top of low-cost data lake storage.'
 category: 'Data warehousing'
 related: ['data-lake', 'data-warehouse', 'etl-vs-elt']

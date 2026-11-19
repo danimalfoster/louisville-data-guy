@@ -1,5 +1,5 @@
 ---
-title: 'AI-Generated Dashboards: When a One-Off HTML Page Is Enough and When to Build an App'
+title: 'Building Dashboards with AI'
 description: 'How I build dashboards with Claude and an MCP server, the difference between a one-off HTML page and a hosted web app, and how to decide which one a request needs.'
 pubDate: '2026-11-18'
 terms: ['model-context-protocol', 'data-governance', 'data-dictionary']
@@ -17,7 +17,7 @@ and guardrails, and the [second](/blog/mcp-servers-for-data-teams/) covered the 
 AI to our data. Dashboards are where those two come together, so if you haven't read the MCP post, it's
 worth a look first.
 
-## How one gets made
+## How I Build Them
 
 All of my dashboards are built with Claude Code or Claude Desktop, and the data comes from one of our
 [MCP servers](/glossary/model-context-protocol/). That's what makes this work as well as it does. The
@@ -46,7 +46,7 @@ The filters and the hover details work, so feel free to click around.
 You can also [open the sample dashboard on its own page](/samples/sample-dashboard.html), which gives
 it more room.
 
-## One-off HTML pages
+## One-Off HTML Pages
 
 The simplest version is a single HTML file. You ask a question, the AI pulls the data and builds the
 page, and you end up with a file you can open in any browser, save, or send to someone. There's nothing
@@ -67,7 +67,7 @@ It's also worth remembering that the data is inside the file. When you send some
 you're sending them the data behind it too, and it will go wherever they forward it. For anything
 sensitive, that alone can be a reason to build a hosted app instead.
 
-## Hosted web apps
+## Hosted Web Apps
 
 The other version is a web app that lives on a server and pulls live data every time someone opens it.
 That's what our online apps are. They sit behind an Entra sign-in, so access is tied to a specific
@@ -88,7 +88,7 @@ date, and somebody has to fix it when something changes in the data underneath i
 trade for a dashboard people use every week. It's probably not worth it for a question that only gets
 asked once.
 
-## Picking between them
+## Which One to Use
 
 When a request comes in, I ask myself a few questions. Will this person need to see it again, or is it
 answering one question? Does the data change often enough that a snapshot would be misleading in a
@@ -99,7 +99,7 @@ If the answer to all of those is no, I build the HTML page. If the answer to any
 probably a hosted app. And sometimes one turns into the other. A one-off page that people keep asking
 me to update is a pretty good sign that it should have been an app.
 
-## A few things to watch for
+## Things to Watch
 
 Right now, I'm the one building these, and I think that's the right setup for a team starting out. Even
 though the AI does most of the work, someone still needs to look at every dashboard before people rely
@@ -115,8 +115,6 @@ It also helps to keep the design consistent. If every dashboard looks different,
 time figuring out the layout instead of reading the numbers. I'd keep a short set of instructions for
 the AI, things like which colors to use, where the filters go, and that every page needs a date at the
 top, the same way I keep standing notes for the MCP work.
-
-## Where to start
 
 If you already have an MCP server connected to your data, try asking for a dashboard the next time
 someone asks you a question that would normally turn into a spreadsheet. Build it as a one-off page,

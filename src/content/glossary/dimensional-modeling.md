@@ -1,5 +1,5 @@
 ---
-term: 'Dimensional modeling'
+term: 'Dimensional Modeling'
 short: 'A way of designing warehouse tables around business processes, splitting data into measurable facts and descriptive dimensions.'
 category: 'Data warehousing'
 related: ['star-schema', 'fact-table', 'dimension-table', 'slowly-changing-dimension', 'data-mart']

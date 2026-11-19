@@ -1,5 +1,5 @@
 ---
-term: 'Fact table'
+term: 'Fact Table'
 short: 'The central table in a dimensional model, with one row per business event and the numeric measures for that event.'
 category: 'Data warehousing'
 related: ['dimension-table', 'star-schema', 'dimensional-modeling']

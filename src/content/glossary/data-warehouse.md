@@ -1,5 +1,5 @@
 ---
-term: 'Data warehouse'
+term: 'Data Warehouse'
 short: 'A central database built for reporting and analysis, holding cleaned, integrated data from many source systems.'
 category: 'Data warehousing'
 related: ['data-lake', 'data-lakehouse', 'etl-vs-elt', 'dimensional-modeling', 'data-mart']

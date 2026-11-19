@@ -1,5 +1,5 @@
 ---
-term: 'Retrieval-augmented generation (RAG)'
+term: 'Retrieval-Augmented Generation (RAG)'
 short: 'A technique that looks up relevant documents or data first, then gives them to a language model so its answer is grounded in your own information.'
 category: 'AI'
 related: ['embeddings', 'vector-database', 'large-language-model', 'hallucination']

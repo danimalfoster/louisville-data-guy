@@ -1,5 +1,5 @@
 ---
-term: 'Data lake'
+term: 'Data Lake'
 short: 'A low-cost storage repository that holds large amounts of raw data in its original format until someone needs it.'
 category: 'Data warehousing'
 related: ['data-warehouse', 'data-lakehouse', 'etl-vs-elt', 'data-catalog']

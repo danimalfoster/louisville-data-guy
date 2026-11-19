@@ -1,5 +1,5 @@
 ---
-term: 'Semantic layer'
+term: 'Semantic Layer'
 short: 'A shared layer of business definitions, like metrics, dimensions, and joins, that sits between raw tables and the tools people use to ask questions.'
 category: 'Data management'
 related: ['data-catalog', 'star-schema', 'text-to-sql', 'data-governance']

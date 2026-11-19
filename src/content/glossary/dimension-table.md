@@ -1,5 +1,5 @@
 ---
-term: 'Dimension table'
+term: 'Dimension Table'
 short: 'A table that describes the people, places, things, and dates involved in business events, used to filter and group facts.'
 category: 'Data warehousing'
 related: ['fact-table', 'slowly-changing-dimension', 'star-schema', 'master-data-management']

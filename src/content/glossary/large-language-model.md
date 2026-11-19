@@ -1,5 +1,5 @@
 ---
-term: 'Large language model (LLM)'
+term: 'Large Language Model (LLM)'
 short: 'An AI model trained on huge amounts of text to predict the next word, which lets it write, summarize, answer questions, and generate code.'
 category: 'AI'
 related: ['hallucination', 'retrieval-augmented-generation', 'prompt-engineering', 'embeddings', 'ai-agent']

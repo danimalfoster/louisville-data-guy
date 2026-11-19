@@ -75,6 +75,25 @@ natural to him. Medium-length sentences joined with *so*, *which*, *because*; no
 - Generic hypotheticals ("A regional bank...") when a real, generalized experience of Daniel's fits.
 - Filler like "In practice," "Crucially," "It's worth noting," "Here's the thing," "Let's dive in."
 
+## Titles and headings
+
+Daniel's feedback (2026-11-18): the first titles and section headings sounded like AI. Keep them short
+and plain, the way he'd label something in an email.
+
+- Titles are one idea, ideally under about 8 words. "Not Everything Needs to Be Agentic," "How I
+  Built Our MCP Servers," "Building Dashboards with AI."
+- Titles and section headings use title case (Daniel's preference, 2026-11-19). Capitalize the first
+  and last words and every major word; keep short articles, conjunctions, and prepositions lowercase
+  (a, an, the, and, or, for, to, of, in, on, with). Keep AI, MCP, HTML as written.
+- No "Topic: subtitle" titles, no stacking two or three ideas into one title ("What X, what Y, and
+  the Z that matters"), and no repeated suffixes like "for Data Teams." Keywords belong in the
+  description and the URL slug.
+- Section headings are plain labels: "Testing," "Guardrails," "Which One to Use." No rhetorical
+  questions ("So where's the line?"), no clever phrasing ("Testing, and accepting that it's never
+  finished"), no "What the hype gets wrong."
+- Don't end every post with the same heading. The closing paragraphs can sit under the last section
+  with no heading of their own.
+
 ## Privacy
 
 Use Daniel's real experiences only in generalized form. No employer-internal details, customer or
@@ -83,6 +102,7 @@ work for his approval during review.
 
 ## Glossary entries
 
+Term names use title case, the same as post titles ("Data Dictionary," "Large Language Model (LLM)").
 Keep the `short` definition (it powers the definition box, the A-Z page, and search snippets). In the
 body: say where the reader is likely to run into the term, explain it plainly, ground it in a real
 example (ideally Daniel's), give his recommendation, and note what to watch out for. Use headings only

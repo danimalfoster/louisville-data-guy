@@ -1,5 +1,5 @@
 ---
-title: 'Agentic AI for Data Teams: What Counts, What Doesn''t, and the Guardrails That Matter'
+title: 'Not Everything Needs to Be Agentic'
 description: 'What "agentic" actually means, five scenarios from plain automation to full agents, and the guardrails I use when AI touches real data.'
 pubDate: '2026-11-16'
 updatedDate: '2026-11-17'
@@ -20,9 +20,9 @@ This is written for data professionals, so I'm going to assume you know your way
 have at least played with an AI assistant. If you need a refresher on any of the terms, they link to the
 [glossary](/glossary/).
 
-## Five scenarios
+## Five Scenarios
 
-### 1. Plain automation
+### 1. Plain Automation
 
 A scheduled job runs every night. It pulls yesterday's transactions, applies a set of rules, generates
 invoices, and emails a summary to finance. There's no AI anywhere in it. Every step was decided in
@@ -33,7 +33,7 @@ This is not agentic, and I want to be clear that it's not a lesser option either
 are trying to solve with AI right now could be solved with this, and it would be cheaper, faster, and
 easier to troubleshoot.
 
-### 2. Automation with an AI step
+### 2. Automation with an AI Step
 
 Same nightly job, but one step uses a [large language model](/glossary/large-language-model/). Maybe it
 reads free-text notes on each account and sorts them into categories, or pulls a contract end date out
@@ -44,7 +44,7 @@ I'd call this AI-assisted automation. It's not really agentic, because the AI ne
 only how to answer the one question it's given. The closest it gets is when the category it picks sends
 the record down one path or another, but even then, every path was written in advance.
 
-### 3. A chatbot with tools
+### 3. A Chatbot with Tools
 
 Now picture a business user typing "How did renewals trend by region last quarter?" into an AI
 assistant that's connected to your reporting database through an
@@ -55,7 +55,7 @@ This is where agency starts to show up. Nobody wrote code that says "for renewal
 three tables." The model chose which tools to call and in what order. It's a short chain, usually a few
 steps, and a person is right there reading the answer, but the model is steering.
 
-### 4. An agent working toward a goal
+### 4. An Agent Working toward a Goal
 
 Give the same assistant a bigger ask: "Figure out why October's invoice totals don't match the billing
 summary." Now it has to plan. It might compare totals by customer, find the customers that don't match,
@@ -64,7 +64,7 @@ September. Each step depends on what it found in the last one, and it decides wh
 
 This is an agent in the full sense. The model is choosing the path, not just the next query.
 
-### 5. An agent that acts on its own
+### 5. An Agent That Acts on Its Own
 
 Last scenario. The same agent finds the problem and, instead of reporting it, fixes it. It updates the
 records, regenerates the invoices, and emails the customers.
@@ -74,7 +74,7 @@ than it did in scenario 4. It's still choosing the path. What changed is what it
 what it finds, which went from reading data and reporting back to changing records and contacting
 customers. It's also the one I would not build, and I'll get into why below.
 
-## So where's the line?
+## Where Agentic Starts
 
 Looking at those five, the thing that separates agentic from not agentic isn't whether there's AI
 involved, and it isn't whether there's a chatbot on the front. It's who decides what happens next. In
@@ -102,7 +102,7 @@ database. It's an AI coding assistant writing SQL, scripts, and pipelines. That 
 scenario 4, since the assistant plans its own steps and checks its own results, except what it produces
 is code that a person reviews before it runs. That's how most of the tools I describe below got built.
 
-## What surprised me
+## What Surprised Me
 
 The thing that has surprised me most about working with these tools is how intuitive they can be when
 they have enough context. The biggest lesson I've learned is to be as descriptive and thorough as
@@ -117,7 +117,7 @@ fraction of the time it used to take me, but every one of those still needs a pe
 make sure it does what it should and nothing else. If you're planning AI work and you budget all your
 time for building and none for review, you're going to be behind.
 
-## The guardrails I use
+## The Guardrails I Use
 
 Guardrails deserve their own post, and they'll get one. But I can't write about agentic AI without
 covering them, because in my opinion they're what makes the difference between a useful agent and a
@@ -185,7 +185,7 @@ notes, files the AI reads every time it starts work. That's where I keep the con
 much, like business rules, naming conventions, which tables are the trusted ones, and the guardrails
 themselves. It means I'm not relying on remembering to type all of that into every prompt.
 
-## Testing it
+## Testing It
 
 I'll mention below that a real agent needs more testing than a fixed workflow, and it's worth saying what
 that looks like, because it's different from testing normal code. The same question can produce
@@ -210,7 +210,7 @@ on work that's only partly done. And a query that returns a lot of rows can crow
 what the model can hold at once. None of these tend to show up in a demo, which is why the test set
 matters.
 
-## What the hype gets wrong
+## The Hype
 
 There's a lot of noise around agents right now, and a few patterns are worth watching for if you're
 evaluating tools or pitching a project internally.
@@ -233,8 +233,6 @@ is more valuable to me than one that quietly fixes things.
 Review time and running costs get left out. The build looks fast because the AI writes the code, but
 someone still has to review it, monitor it, and look into it when something odd shows up. And agents that
 take many steps per request use a lot of tokens, which adds up quickly at scale.
-
-## Where to start
 
 If a company asked me where to start with agentic AI for their data and reporting, I'd tell them to start
 by reviewing their current data environment and reporting. What systems do they have, how is the data

@@ -1,5 +1,5 @@
 ---
-term: 'Vector database'
+term: 'Vector Database'
 short: 'A database designed to store embeddings and quickly find the items most similar to a given query, which powers semantic search and RAG.'
 category: 'AI'
 related: ['embeddings', 'retrieval-augmented-generation', 'data-lakehouse']

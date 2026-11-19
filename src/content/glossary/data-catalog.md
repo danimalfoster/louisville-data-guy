@@ -1,5 +1,5 @@
 ---
-term: 'Data catalog'
+term: 'Data Catalog'
 short: 'A searchable inventory of an organization''s data assets, with descriptions, owners, definitions, and usage, so people can find and understand data.'
 category: 'Data management'
 related: ['data-governance', 'data-lineage', 'semantic-layer', 'data-dictionary']

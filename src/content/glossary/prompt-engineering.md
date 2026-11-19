@@ -1,5 +1,5 @@
 ---
-term: 'Prompt engineering'
+term: 'Prompt Engineering'
 short: 'The practice of writing and refining the instructions and context given to an AI model so it produces accurate, consistent, useful output.'
 category: 'AI'
 related: ['large-language-model', 'hallucination', 'retrieval-augmented-generation']
