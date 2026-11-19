@@ -1,5 +1,5 @@
 ---
-title: 'AI-Generated Dashboards: When a One-Off HTML Page Is Enough and When to Build an App'
+title: 'Building dashboards with AI'
 description: 'How I build dashboards with Claude and an MCP server, the difference between a one-off HTML page and a hosted web app, and how to decide which one a request needs.'
 pubDate: '2026-11-18'
 terms: ['model-context-protocol', 'data-governance', 'data-dictionary']
@@ -17,7 +17,7 @@ and guardrails, and the [second](/blog/mcp-servers-for-data-teams/) covered the 
 AI to our data. Dashboards are where those two come together, so if you haven't read the MCP post, it's
 worth a look first.
 
-## How one gets made
+## How I build them
 
 All of my dashboards are built with Claude Code or Claude Desktop, and the data comes from one of our
 [MCP servers](/glossary/model-context-protocol/). That's what makes this work as well as it does. The
@@ -88,7 +88,7 @@ date, and somebody has to fix it when something changes in the data underneath i
 trade for a dashboard people use every week. It's probably not worth it for a question that only gets
 asked once.
 
-## Picking between them
+## Which one to use
 
 When a request comes in, I ask myself a few questions. Will this person need to see it again, or is it
 answering one question? Does the data change often enough that a snapshot would be misleading in a
@@ -99,7 +99,7 @@ If the answer to all of those is no, I build the HTML page. If the answer to any
 probably a hosted app. And sometimes one turns into the other. A one-off page that people keep asking
 me to update is a pretty good sign that it should have been an app.
 
-## A few things to watch for
+## Things to watch
 
 Right now, I'm the one building these, and I think that's the right setup for a team starting out. Even
 though the AI does most of the work, someone still needs to look at every dashboard before people rely
@@ -115,8 +115,6 @@ It also helps to keep the design consistent. If every dashboard looks different,
 time figuring out the layout instead of reading the numbers. I'd keep a short set of instructions for
 the AI, things like which colors to use, where the filters go, and that every page needs a date at the
 top, the same way I keep standing notes for the MCP work.
-
-## Where to start
 
 If you already have an MCP server connected to your data, try asking for a dashboard the next time
 someone asks you a question that would normally turn into a spreadsheet. Build it as a one-off page,

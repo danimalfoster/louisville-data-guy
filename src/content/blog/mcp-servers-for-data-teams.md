@@ -1,5 +1,5 @@
 ---
-title: 'MCP Servers for Data Teams: How I Built Ours and Why the Data Dictionary Comes First'
+title: 'How I built our MCP servers'
 description: 'How I use MCP servers to answer the business questions that used to land in my inbox, how they are set up, who uses them, and why a data dictionary is the first thing to build.'
 pubDate: '2026-11-17'
 terms: ['model-context-protocol', 'data-dictionary', 'text-to-sql', 'semantic-layer', 'data-quality', 'large-language-model', 'hallucination']
@@ -129,7 +129,7 @@ the same way every time. That's why the rules that matter most, like how a metri
 live in the tool code and not only in the dictionary. The dictionary helps the AI understand the
 question and pick the right tool, and the tool makes sure the math comes out the same every time.
 
-## Testing, and accepting that it's never finished
+## Testing
 
 Before you put an MCP server in front of people, build a solid set of benchmarks and test cases. Take
 the questions people actually ask, figure out the correct answers yourself, and check that the server
@@ -142,7 +142,7 @@ something needs to change, whether that's a tool description, a business rule, o
 can usually make the change and test it quickly, and sometimes pivot entirely if the first approach
 wasn't right.
 
-## How people have taken to it
+## How people use it
 
 Honestly, it's been mixed. Some teams have really embraced it, and some haven't. My view is that people
 who ignore AI tools do so at their own peril, because the gap between people who use them well and
@@ -157,15 +157,13 @@ computer. You can export the results, turn them into a presentation, or build an
 them, all in the same conversation. At that point, your main constraints are your imagination and the
 permissions your organization has given you. I'll get into the dashboard side of this in the next post.
 
-## The guardrails still apply
+## Guardrails
 
 I covered guardrails in detail in the [agentic AI post](/blog/agentic-ai-for-data-teams/), and all of
 them apply here. Each user has their own API key, the servers are split by role, every query the AI
 writes is checked before it runs, anything that changes data needs a person to approve it, and
 everything gets logged. I won't repeat all of it, but I'd read that section before building anything
 that connects AI to your production data.
-
-## Where to start
 
 If you want to try this at your company, start with the data dictionary. Document your most-used tables
 first, how they join, how they should be aggregated, and what the business means by the terms it uses

@@ -1,5 +1,5 @@
 ---
-title: 'Agentic AI for Data Teams: What Counts, What Doesn''t, and the Guardrails That Matter'
+title: 'Not everything needs to be agentic'
 description: 'What "agentic" actually means, five scenarios from plain automation to full agents, and the guardrails I use when AI touches real data.'
 pubDate: '2026-11-16'
 updatedDate: '2026-11-17'
@@ -74,7 +74,7 @@ than it did in scenario 4. It's still choosing the path. What changed is what it
 what it finds, which went from reading data and reporting back to changing records and contacting
 customers. It's also the one I would not build, and I'll get into why below.
 
-## So where's the line?
+## Where agentic starts
 
 Looking at those five, the thing that separates agentic from not agentic isn't whether there's AI
 involved, and it isn't whether there's a chatbot on the front. It's who decides what happens next. In
@@ -210,7 +210,7 @@ on work that's only partly done. And a query that returns a lot of rows can crow
 what the model can hold at once. None of these tend to show up in a demo, which is why the test set
 matters.
 
-## What the hype gets wrong
+## The hype
 
 There's a lot of noise around agents right now, and a few patterns are worth watching for if you're
 evaluating tools or pitching a project internally.
@@ -233,8 +233,6 @@ is more valuable to me than one that quietly fixes things.
 Review time and running costs get left out. The build looks fast because the AI writes the code, but
 someone still has to review it, monitor it, and look into it when something odd shows up. And agents that
 take many steps per request use a lot of tokens, which adds up quickly at scale.
-
-## Where to start
 
 If a company asked me where to start with agentic AI for their data and reporting, I'd tell them to start
 by reviewing their current data environment and reporting. What systems do they have, how is the data
