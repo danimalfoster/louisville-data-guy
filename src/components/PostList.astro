@@ -18,6 +18,7 @@ const termName = new Map((await getTerms()).map((t) => [t.id, chipName(t.data.te
 			return (
 				<li class="card">
 					<p class="post-meta">
+						{post.data.deepDive && <span class="kind-tag">Deep dive</span>}
 						<FormattedDate date={post.data.pubDate} /> · {minutes(post.body)} min read
 						{post.data.draft && <span class="draft-tag">draft</span>}
 					</p>
@@ -105,6 +106,15 @@ const termName = new Map((await getTerms()).map((t) => [t.id, chipName(t.data.te
 		font-weight: 600;
 		text-decoration: none;
 		margin-left: auto;
+	}
+	.kind-tag {
+		margin-right: 0.6em;
+		padding: 0.1em 0.5em;
+		border-radius: 4px;
+		background: var(--chip-bg);
+		color: var(--chip-text);
+		font-weight: 600;
+		font-size: 0.85em;
 	}
 	.draft-tag {
 		margin-left: 0.5em;

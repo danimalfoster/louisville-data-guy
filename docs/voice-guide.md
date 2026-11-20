@@ -94,6 +94,23 @@ and plain, the way he'd label something in an email.
 - Don't end every post with the same heading. The closing paragraphs can sit under the last section
   with no heading of their own.
 
+## Deep dives
+
+Started 2026-11-20 with "Building modern data infrastructure." Deep dives are a second kind of post:
+longer, more technical, and more like a reference, written to answer the questions a data leader would
+have when building or choosing something. Mark them with `deepDive: true` in the frontmatter, which
+adds a "Deep dive" label on the post and its card.
+
+- Informational first, opinion second. Lay out the options and the tradeoffs fairly. Daniel's own lean
+  (like preferring ELT) still belongs, stated briefly in first person, but the post shouldn't argue for
+  it.
+- More structure is fine here: more headings (still plain labels), numbered steps, checklists of
+  questions to answer, and a comparison table where options really are being compared.
+- Name real tools and vendors as examples, and keep claims about them to things that are clearly true
+  and unlikely to go stale quickly.
+- Everything else in this guide still applies: no bold labels, no em dashes, everyday words, and a
+  plain ending.
+
 ## Privacy
 
 Use Daniel's real experiences only in generalized form. No employer-internal details, customer or

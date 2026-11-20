@@ -14,7 +14,7 @@ type Props = Omit<CollectionEntry<'blog'>['data'], 'pubDate' | 'draft'> & {
 	draft?: boolean;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, draft, terms = [] } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, draft, deepDive, terms = [] } = Astro.props;
 const allTerms = await getTerms();
 const tags = terms
 	.map((r) => allTerms.find((t) => t.id === r.id))
@@ -32,6 +32,7 @@ const tags = terms
 			<article>
 				{heroImage && <Image width={1020} height={510} src={heroImage} alt="" class="hero" />}
 				<header class="post-head">
+					{deepDive && <p class="eyebrow">Deep dive</p>}
 					<h1>{title}</h1>
 					{
 						pubDate && (
@@ -72,6 +73,14 @@ const tags = terms
 		margin-bottom: 2em;
 		padding-bottom: 1em;
 		border-bottom: 1px solid var(--border);
+	}
+	.eyebrow {
+		margin: 0 0 0.4em;
+		color: var(--accent);
+		font-size: 0.8em;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
 	}
 	.date {
 		color: var(--muted);
