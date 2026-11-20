@@ -19,6 +19,8 @@ const blog = defineCollection({
 			terms: z.array(reference('glossary')).default([]),
 			// Draft posts never appear on the live site. Flip to false (or delete) once approved.
 			draft: z.boolean().default(false),
+			// Deep dives are longer, more technical reference posts. They get a "Deep dive" label.
+			deepDive: z.boolean().default(false),
 		}),
 });
 
